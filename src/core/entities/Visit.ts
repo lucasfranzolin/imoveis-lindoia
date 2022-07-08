@@ -1,8 +1,7 @@
 import { Entity } from '../../core/domain/Entity';
-import { Schedule } from '../../core/domain/Schedule';
-import { DealMediation, Note } from '../../core/types';
+import { DealMediation, Note, Schedule } from '../../core/types';
 
-type Props = DealMediation & {
+export type Props = DealMediation & {
     schedule: Schedule;
     notes: Array<Note>;
 };

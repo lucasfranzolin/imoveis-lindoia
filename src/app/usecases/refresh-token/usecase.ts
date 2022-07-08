@@ -1,4 +1,4 @@
-import { Session } from '../../../domain/entities/Session';
+import { Session } from '../../../core/entities/Session';
 import { ITokenProvider } from '../../providers/interfaces/ITokenProvider';
 import { ISessionsRepository } from '../../repositories/ISessionsRepository';
 

@@ -1,6 +1,6 @@
 import { Entity } from '../../core/domain/Entity';
 
-type Props = {
+export type Props = {
     expiresIn: number;
     realtorId: string;
 };

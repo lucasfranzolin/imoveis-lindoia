@@ -1,8 +1,12 @@
-import { Address } from '../../core/domain/Address';
 import { Entity } from '../../core/domain/Entity';
-import { Price, PropertyPurpose, PropertyType } from '../../core/types';
+import {
+    Price,
+    PropertyPurpose,
+    PropertyType,
+    Address,
+} from '../../core/types';
 
-type Props = {
+export type Props = {
     address: Address;
     ownerId: string;
     purpose: PropertyPurpose;

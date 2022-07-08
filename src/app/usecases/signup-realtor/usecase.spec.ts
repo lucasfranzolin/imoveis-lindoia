@@ -1,6 +1,6 @@
 import dcopy from 'deep-copy';
 
-import { Realtor } from '../../../domain/entities/Realtor';
+import { Realtor } from '../../../core/entities/Realtor';
 import { InMemoryRealtorsRepository } from '../../../test-utils/repositories/InMemoryRealtorsRepository';
 import { IPasswordProvider } from '../../providers/interfaces/IPasswordProvider';
 import { PasswordProvider } from '../../providers/PasswordProvider';

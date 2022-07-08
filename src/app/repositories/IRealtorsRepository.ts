@@ -1,4 +1,4 @@
-import { Realtor } from '../../domain/entities/Realtor';
+import { Realtor } from '../../core/entities/Realtor';
 
 export interface IRealtorsRepository {
     findByEmail(email: string): Promise<Realtor | null>;

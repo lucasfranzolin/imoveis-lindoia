@@ -1,4 +1,4 @@
-import { Session } from '../../../domain/entities/Session';
+import { Session } from '../../../core/entities/Session';
 import { InMemorySessionsRepository } from '../../../test-utils/repositories/InMemorySessionsRepository';
 import { LogoutRealtorUseCase } from './usecase';
 

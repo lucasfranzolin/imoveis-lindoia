@@ -1,5 +1,5 @@
 import { ISessionsRepository } from '../../app/repositories/ISessionsRepository';
-import { Session } from '../../domain/entities/Session';
+import { Session } from '../../core/entities/Session';
 
 export class InMemorySessionsRepository implements ISessionsRepository {
     public items: Session[] = [];

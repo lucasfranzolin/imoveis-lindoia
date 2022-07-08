@@ -1,7 +1,7 @@
-import { Address } from '../../core/domain/Address';
+import { Address } from '../../core/types';
 import { Entity } from '../../core/domain/Entity';
 
-type Props = {
+export type Props = {
     address?: Address;
     creci?: string;
     email: string;

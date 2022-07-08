@@ -1,4 +1,4 @@
-import { Session } from '../../domain/entities/Session';
+import { Session } from '../../core/entities/Session';
 
 export interface ISessionsRepository {
     deleteById(sessionId: string): Promise<void>;

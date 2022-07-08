@@ -1,5 +1,5 @@
 import { mongo } from '../../../config/mongo';
-import { Realtor } from '../../../domain/entities/Realtor';
+import { Realtor } from '../../../core/entities/Realtor';
 import { IRealtorsRepository } from '../IRealtorsRepository';
 
 const collection = 'realtors';

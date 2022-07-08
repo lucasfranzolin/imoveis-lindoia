@@ -1,5 +1,5 @@
 import { IRealtorsRepository } from '../../app/repositories/IRealtorsRepository';
-import { Realtor } from '../../domain/entities/Realtor';
+import { Realtor } from '../../core/entities/Realtor';
 
 export class InMemoryRealtorsRepository implements IRealtorsRepository {
     public items: Realtor[] = [];

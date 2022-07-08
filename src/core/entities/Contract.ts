@@ -1,7 +1,7 @@
 import { Entity } from '../../core/domain/Entity';
 import { DealMediation, DealType } from '../../core/types';
 
-type Props = DealMediation & {
+export type Props = DealMediation & {
     dealType: DealType;
     price: number;
     months?: number;

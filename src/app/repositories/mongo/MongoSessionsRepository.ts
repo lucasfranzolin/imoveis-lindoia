@@ -1,5 +1,5 @@
 import { mongo } from '../../../config/mongo';
-import { Session } from '../../../domain/entities/Session';
+import { Session } from '../../../core/entities/Session';
 import { ISessionsRepository } from '../ISessionsRepository';
 
 const collection = 'sessions';

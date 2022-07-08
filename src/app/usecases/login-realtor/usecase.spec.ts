@@ -1,4 +1,4 @@
-import { Realtor } from '../../../domain/entities/Realtor';
+import { Realtor } from '../../../core/entities/Realtor';
 import { InMemoryRealtorsRepository } from '../../../test-utils/repositories/InMemoryRealtorsRepository';
 import { InMemorySessionsRepository } from '../../../test-utils/repositories/InMemorySessionsRepository';
 import { IPasswordProvider } from '../../providers/interfaces/IPasswordProvider';

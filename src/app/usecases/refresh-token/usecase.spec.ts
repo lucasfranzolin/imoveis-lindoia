@@ -1,6 +1,6 @@
 import { getUnixTime } from 'date-fns';
 
-import { Session } from '../../../domain/entities/Session';
+import { Session } from '../../../core/entities/Session';
 import { InMemorySessionsRepository } from '../../../test-utils/repositories/InMemorySessionsRepository';
 import { ITokenProvider } from '../../providers/interfaces/ITokenProvider';
 import { TokenProvider } from '../../providers/TokenProvider';
