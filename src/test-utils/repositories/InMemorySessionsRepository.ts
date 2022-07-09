@@ -20,23 +20,13 @@ export class InMemorySessionsRepository implements ISessionsRepository {
         return session;
     }
 
-    async refresh(
-        sessionId: string,
-        expiresIn: number
-    ): Promise<Session | null> {
-        this.items = this.items.map((session) => {
-            if (session.id === sessionId) {
-                session = Session.create(
-                    {
-                        expiresIn,
-                        realtorId: session.props.realtorId,
-                    },
-                    sessionId
-                );
+    async update(session: Session): Promise<void> {
+        this.items = this.items.map((item) => {
+            if (item.id === session.id) {
+                return session;
             }
-            return session;
+            return item;
         });
-        return this.findById(sessionId);
     }
 
     async save(session: Session): Promise<void> {

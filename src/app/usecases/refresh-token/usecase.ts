@@ -28,20 +28,25 @@ export class RefreshTokenUseCase {
         if (!currentSession) {
             throw new ApiError(httpStatus.NOT_FOUND, 'Sessão inválida.');
         }
-        const { realtorId, expiresIn } = currentSession.props;
-        const realtor = await this.realtorsRepository.findById(realtorId);
+        const realtor = await this.realtorsRepository.findById(
+            currentSession.props.realtorId
+        );
         if (!realtor) {
             throw new ApiError(httpStatus.NOT_FOUND, 'O corretor não existe.');
         }
         const token = this.tokenProvider.generate(realtor);
-        if (this.tokenProvider.isExpired(expiresIn)) {
-            const newSession = await this.sessionsRepository.refresh(
-                sessionId,
-                this.tokenProvider.calcExpireTime()
+        if (this.tokenProvider.isExpired(currentSession.props.expiresIn)) {
+            const newSession = Session.create(
+                {
+                    ...currentSession.props,
+                    expiresIn: this.tokenProvider.calcExpireTime(),
+                },
+                sessionId
             );
+            await this.sessionsRepository.update(newSession);
             return {
                 token,
-                session: newSession!,
+                session: newSession,
             };
         }
         return {

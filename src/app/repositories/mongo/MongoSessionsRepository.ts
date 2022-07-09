@@ -22,18 +22,16 @@ export class MongoSessionsRepository implements ISessionsRepository {
         return Session.create(doc.props, doc.uuid);
     }
 
-    async refresh(
-        sessionId: string,
-        expiresIn: number
-    ): Promise<Session | null> {
-        const filter = { uuid: sessionId };
+    async update(session: Session): Promise<void> {
+        const filter = { uuid: session.id };
         await mongo
             .getDb()
             .collection(collection)
             .findOneAndUpdate(filter, {
-                $set: { 'props.expiresIn': expiresIn },
+                $set: {
+                    props: session.props,
+                },
             });
-        return await this.findById(sessionId);
     }
 
     async save(session: Session): Promise<void> {

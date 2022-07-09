@@ -4,6 +4,6 @@ export interface ISessionsRepository {
     deleteAllByRealtorId(realtorId: string): Promise<void>;
     deleteById(sessionId: string): Promise<void>;
     findById(sessionId: string): Promise<Session | null>;
-    refresh(sessionId: string, expiresIn: number): Promise<Session | null>;
+    update(session: Session): Promise<void>;
     save(session: Session): Promise<void>;
 }
