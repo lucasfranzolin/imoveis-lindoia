@@ -1,4 +1,5 @@
 import { getUnixTime } from 'date-fns';
+import { Realtor } from '../../../core/entities/Realtor';
 
 import { Session } from '../../../core/entities/Session';
 import { InMemoryRealtorsRepository } from '../../../test-utils/repositories/InMemoryRealtorsRepository';
@@ -33,34 +34,61 @@ describe('refresh-token', () => {
         await expect(sut.execute({ sessionId: 'invalidId' })).rejects.toThrow();
     });
 
-    it('should return new session if session is expired', async () => {
-        const mockRealtorId = 'test123';
-        const expiredSession = Session.create(
-            {
-                realtorId: mockRealtorId,
-                expiresIn: 0,
-            },
-            mockRealtorId
-        );
+    it('should throw if realtor does not exists', async () => {
+        const realtor = Realtor.create({
+            email: 'test@email.com',
+            password: '123',
+        });
+        expect(realtorsRepository.items.length).toBe(0);
+        const expiredSession = Session.create({
+            realtorId: realtor.id,
+            expiresIn: 0,
+        });
+        expect(sessionsRepository.items.length).toBe(0);
         sessionsRepository.items.push(expiredSession);
-        const result = await sut.execute({ sessionId: mockRealtorId });
+        expect(sessionsRepository.items.length).toBe(1);
+        await expect(
+            sut.execute({ sessionId: expiredSession.id })
+        ).rejects.toThrow();
+    });
+
+    it('should return new session if session is expired', async () => {
+        expect(realtorsRepository.items.length).toBe(0);
+        const realtor = Realtor.create({
+            email: 'test@email.com',
+            password: '123',
+        });
+        realtorsRepository.items.push(realtor);
+        expect(realtorsRepository.items.length).toBe(1);
+        const expiredSession = Session.create({
+            realtorId: realtor.id,
+            expiresIn: 0,
+        });
+        expect(sessionsRepository.items.length).toBe(0);
+        sessionsRepository.items.push(expiredSession);
+        expect(sessionsRepository.items.length).toBe(1);
+        const result = await sut.execute({ sessionId: expiredSession.id });
         expect(result.session.props.expiresIn).toBeGreaterThan(
             expiredSession.props.expiresIn
         );
     });
 
     it('should return same session if token is not expired', async () => {
-        const mockRealtorId = 'anothr';
-        const old = getUnixTime(new Date(3022, 1, 1, 0, 0, 0));
-        const expiredSession = Session.create(
-            {
-                realtorId: mockRealtorId,
-                expiresIn: old,
-            },
-            mockRealtorId
-        );
-        sessionsRepository.items.push(expiredSession);
-        const result = await sut.execute({ sessionId: mockRealtorId });
-        expect(result.session).toBe(expiredSession);
+        expect(realtorsRepository.items.length).toBe(0);
+        const realtor = Realtor.create({
+            email: 'test@email.com',
+            password: '123',
+        });
+        realtorsRepository.items.push(realtor);
+        expect(realtorsRepository.items.length).toBe(1);
+        const currentSession = Session.create({
+            realtorId: realtor.id,
+            expiresIn: getUnixTime(new Date(3022, 1, 1, 0, 0, 0)),
+        });
+        expect(sessionsRepository.items.length).toBe(0);
+        sessionsRepository.items.push(currentSession);
+        expect(sessionsRepository.items.length).toBe(1);
+        const result = await sut.execute({ sessionId: currentSession.id });
+        expect(result.session).toBe(currentSession);
     });
 });
