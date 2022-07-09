@@ -4,6 +4,12 @@ import { Session } from '../../core/entities/Session';
 export class InMemorySessionsRepository implements ISessionsRepository {
     public items: Session[] = [];
 
+    async deleteAllByRealtorId(realtorId: string): Promise<void> {
+        this.items = this.items.filter(
+            (session) => session.props.realtorId !== realtorId
+        );
+    }
+
     async deleteById(sessionId: string): Promise<void> {
         this.items = this.items.filter((session) => session.id !== sessionId);
     }

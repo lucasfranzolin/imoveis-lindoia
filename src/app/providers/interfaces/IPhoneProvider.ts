@@ -1,3 +1,4 @@
 export interface IPhoneProvider {
-    validate(phoneNumber: string): boolean;
+    format(phoneNumber: string): string;
+    validate(phoneNumber: string): never | void;
 }

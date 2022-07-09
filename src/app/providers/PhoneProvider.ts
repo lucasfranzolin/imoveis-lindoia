@@ -5,7 +5,12 @@ export class PhoneProvider implements IPhoneProvider {
         return phoneNumber.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
     }
 
-    validate(phoneNumber: string): boolean {
-        return /^\d{11}$/.test(phoneNumber);
+    /**
+     * @throws {Error}
+     */
+    validate(phoneNumber: string): never | void {
+        if (!/^\d{11}$/.test(phoneNumber)) {
+            throw new Error('Telefone inválido.');
+        }
     }
 }

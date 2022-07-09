@@ -1,8 +1,8 @@
 import { Server } from 'http';
 
-import { config } from '../../config/config';
-import { logger } from '../../config/logger';
-import { mongo } from '../../config/mongo';
+import { config } from '../config/config';
+import { logger } from '../config/logger';
+import { mongo } from '../config/mongo';
 import { app } from './app';
 
 let server: Server;

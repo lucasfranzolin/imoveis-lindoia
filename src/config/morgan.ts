@@ -16,7 +16,7 @@ const getIpFormat = () =>
         : '';
 
 const successResponseFormat = `${getIpFormat()}method=:method url=:url status=:status ms=:response-time`;
-const errorResponseFormat = `${getIpFormat()}method=:method url=:url status=:status ms=:response-time msg=:message`;
+const errorResponseFormat = `${getIpFormat()}${successResponseFormat} msg=:message`;
 
 const successHandler = _morgan(successResponseFormat, {
     skip: (req, res) => res.statusCode >= 400,

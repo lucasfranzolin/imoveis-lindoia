@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 
-import { loginRealtorUseCase } from '../../usecases/login-realtor';
-import { logoutRealtorUseCase } from '../../usecases/logout-realtor';
-import { refreshTokenUseCase } from '../../usecases/refresh-token';
+import { loginRealtorUseCase } from '../usecases/login-realtor';
+import { logoutRealtorUseCase } from '../usecases/logout-realtor';
+import { refreshTokenUseCase } from '../usecases/refresh-token';
+import { verifySessionUseCase } from '../usecases/verify-session';
+import { signUpRealtorUseCase } from '../usecases/signup-realtor';
 
 export async function login(
     req: Request,
@@ -41,6 +43,34 @@ export async function logout(
     const { sessionId } = req.body;
     try {
         await logoutRealtorUseCase.execute({ sessionId });
+        res.status(httpStatus.OK).send();
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function verify(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const { sessionId } = req.body;
+    try {
+        await verifySessionUseCase.execute({ sessionId });
+        res.status(httpStatus.OK).send();
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function register(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const { email, password } = req.body;
+    try {
+        await signUpRealtorUseCase.execute({ email, password });
         res.status(httpStatus.OK).send();
     } catch (err) {
         next(err);

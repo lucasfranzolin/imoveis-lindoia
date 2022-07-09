@@ -3,6 +3,7 @@ import { zonedTimeToUtc } from 'date-fns-tz';
 import { sign } from 'jsonwebtoken';
 
 import { config } from '../../config/config';
+import { Realtor } from '../../core/entities/Realtor';
 import { ITokenProvider } from './interfaces/ITokenProvider';
 
 const timeZone = 'America/Sao_Paulo';
@@ -14,10 +15,10 @@ export class TokenProvider implements ITokenProvider {
         return getUnixTime(future);
     }
 
-    generate(realtorId: string): string {
+    generate(realtor: Realtor): string {
         const minutes = config.jwt.tokenExpiresIn;
         const token = sign({}, config.jwt.secret, {
-            subject: realtorId,
+            subject: realtor.id,
             expiresIn: minutes * 60,
         });
         return token;

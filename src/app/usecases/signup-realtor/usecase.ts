@@ -1,4 +1,6 @@
+import httpStatus from 'http-status';
 import { Realtor } from '../../../core/entities/Realtor';
+import { ApiError } from '../../ApiError';
 import { IPasswordProvider } from '../../providers/interfaces/IPasswordProvider';
 import { IRealtorsRepository } from '../../repositories/IRealtorsRepository';
 
@@ -19,11 +21,17 @@ export class SignUpRealtorUseCase {
         const allowedDomain = 'imoveislindoia.com.br';
         const [, domain] = email.split('@');
         if (domain.toLowerCase() !== allowedDomain) {
-            throw new Error(`O domínio '${domain}' não é permitido.`);
+            throw new ApiError(
+                httpStatus.NOT_ACCEPTABLE,
+                `O domínio '${domain}' não é permitido.`
+            );
         }
         const realtor = await this.realtorsRepository.findByEmail(email);
         if (realtor) {
-            throw new Error('O email fornecido já está em uso.');
+            throw new ApiError(
+                httpStatus.CONFLICT,
+                'O email fornecido já está em uso.'
+            );
         }
         const passwordHash = await this.passwordProvider.encode(password);
         const newRealtor = Realtor.create({

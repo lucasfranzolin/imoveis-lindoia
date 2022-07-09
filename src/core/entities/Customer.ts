@@ -1,4 +1,4 @@
-import { Entity } from '../../core/domain/Entity';
+import { Entity } from '../domain/Entity';
 
 export type Props = {
     email: string;

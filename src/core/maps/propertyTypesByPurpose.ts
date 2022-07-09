@@ -1,13 +1,16 @@
-import { PropertyPurpose, PropertyType } from '../types';
+import { PropertyPurposeEnum, PropertyTypeEnum } from '../enums';
 
 export const propertyTypesByPurpose: {
-    [key in PropertyPurpose]: PropertyType[];
+    [key in PropertyPurposeEnum]: PropertyTypeEnum[];
 } = {
-    [PropertyPurpose.BUSINESS]: [
-        PropertyType.FLOOR,
-        PropertyType.HOTEL,
-        PropertyType.ROOM,
-        PropertyType.SET,
+    [PropertyPurposeEnum.BUSINESS]: [
+        PropertyTypeEnum.FLOOR,
+        PropertyTypeEnum.HOTEL,
+        PropertyTypeEnum.ROOM,
+        PropertyTypeEnum.SET,
     ],
-    [PropertyPurpose.HOME]: [PropertyType.APARTMENT, PropertyType.HOUSE],
+    [PropertyPurposeEnum.HOME]: [
+        PropertyTypeEnum.APARTMENT,
+        PropertyTypeEnum.HOUSE,
+    ],
 };

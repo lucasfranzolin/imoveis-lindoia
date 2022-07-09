@@ -5,6 +5,11 @@ import { ISessionsRepository } from '../ISessionsRepository';
 const collection = 'sessions';
 
 export class MongoSessionsRepository implements ISessionsRepository {
+    async deleteAllByRealtorId(realtorId: string): Promise<void> {
+        const filter = { 'props.realtorId': realtorId };
+        await mongo.getDb().collection(collection).deleteMany(filter);
+    }
+
     async deleteById(sessionId: string): Promise<void> {
         const filter = { uuid: sessionId };
         await mongo.getDb().collection(collection).findOneAndDelete(filter);

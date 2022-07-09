@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { config } from '../../../config/config';
+import { config } from '../../config/config';
 import { ApiError } from '../ApiError';
 
 export const errorHandler = (

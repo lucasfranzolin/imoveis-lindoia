@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 
-import { listCustomersUseCase } from '../../usecases/list-customers';
-import { createCustomerUseCase } from '../../usecases/create-customer';
+import { listCustomersUseCase } from '../usecases/list-customers';
+import { saveCustomerUseCase } from '../usecases/save-customer';
 
 export async function paginate(
     req: Request,
@@ -24,7 +24,7 @@ export async function save(
 ): Promise<void> {
     const { email, fullName, phone } = req.body;
     try {
-        await createCustomerUseCase.execute({ email, fullName, phone });
+        await saveCustomerUseCase.execute({ email, fullName, phone });
         res.status(httpStatus.OK).send();
     } catch (err) {
         next(err);

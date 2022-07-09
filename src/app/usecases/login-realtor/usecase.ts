@@ -1,4 +1,6 @@
+import httpStatus from 'http-status';
 import { Session } from '../../../core/entities/Session';
+import { ApiError } from '../../ApiError';
 import { IPasswordProvider } from '../../providers/interfaces/IPasswordProvider';
 import { ITokenProvider } from '../../providers/interfaces/ITokenProvider';
 import { IRealtorsRepository } from '../../repositories/IRealtorsRepository';
@@ -25,21 +27,19 @@ export class LoginRealtorUseCase {
     async execute({ email, password }: RequestDTO): ResponseDTO {
         const realtor = await this.realtorsRepository.findByEmail(email);
         if (!realtor) {
-            throw new Error('O email não está cadastrado.');
+            throw new ApiError(
+                httpStatus.NOT_FOUND,
+                'O email não está cadastrado.'
+            );
         }
-        const passwordsMatch = await this.passwordProvider.isMatch(
-            password,
-            realtor.props.password
-        );
-        if (!passwordsMatch) {
-            throw new Error('Senha incorreta.');
-        }
+        await this.passwordProvider.verify(password, realtor.props.password);
+        await this.sessionsRepository.deleteAllByRealtorId(realtor.id);
         const session = Session.create({
             realtorId: realtor.id,
             expiresIn: this.tokenProvider.calcExpireTime(),
         });
         await this.sessionsRepository.save(session);
-        const token = this.tokenProvider.generate(realtor.id);
+        const token = this.tokenProvider.generate(realtor);
         return { token, session };
     }
 }

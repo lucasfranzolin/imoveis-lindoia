@@ -1,8 +1,9 @@
-import { Entity } from '../../core/domain/Entity';
-import { DealMediation, DealType } from '../../core/types';
+import { Entity } from '../domain/Entity';
+import { DealMediation } from '../types';
+import { DealEnum } from '../enums';
 
 export type Props = DealMediation & {
-    dealType: DealType;
+    DealEnum: DealEnum;
     price: number;
     months?: number;
     createdAt: Date;

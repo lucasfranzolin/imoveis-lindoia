@@ -29,15 +29,20 @@ export class MongoCustomersRepository implements ICustomersRepository {
         page,
         sortBy,
     }: Pagination<CustomerProps>): Promise<Array<Customer>> {
-        const by = `props.${sortBy}`;
+        const agg = [
+            { $skip: limit * page }, //
+            { $limit: limit },
+        ];
+        if (sortBy) {
+            const by = `props.${sortBy}`;
+            agg.push(
+                { $sort: { [by]: order } } as any //
+            );
+        }
         const docs = await mongo
             .getDb()
             .collection(collection)
-            .aggregate([
-                { $skip: limit * page },
-                { $limit: limit },
-                { $sort: { [by]: order } },
-            ])
+            .aggregate(agg)
             .toArray();
         return docs.map((doc) => Customer.create(doc.props, doc.uuid));
     }

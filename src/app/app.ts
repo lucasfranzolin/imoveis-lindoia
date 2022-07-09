@@ -3,8 +3,8 @@ import express, { Application, json, urlencoded } from 'express';
 import helmet from 'helmet';
 import httpStatus from 'http-status';
 
-import { config } from '../../config/config';
-import { morgan } from '../../config/morgan';
+import { config } from '../config/config';
+import { morgan } from '../config/morgan';
 import { ApiError } from './ApiError';
 import { errorConverter } from './middlewares/error-converter';
 import { errorHandler } from './middlewares/error-handler';

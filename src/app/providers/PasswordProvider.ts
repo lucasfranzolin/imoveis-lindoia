@@ -7,7 +7,10 @@ export class PasswordProvider implements IPasswordProvider {
         return await hash(password, 8);
     }
 
-    async isMatch(str: string, hash: string): Promise<boolean> {
-        return await compare(str, hash);
+    async verify(str: string, hash: string): Promise<void> | never {
+        const isValid = await compare(str, hash);
+        if (!isValid) {
+            throw new Error('As senhas não correspondem.');
+        }
     }
 }

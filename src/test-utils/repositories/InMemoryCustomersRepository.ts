@@ -30,10 +30,13 @@ export class InMemoryCustomersRepository implements ICustomersRepository {
     }: Pagination<CustomerProps>): Promise<Array<Customer>> {
         let customers = this.items;
         if (page && limit) customers = customers.slice(page, page * limit);
-        const sortASC = order > 0;
-        return sortASC
-            ? customers.sort(asc(sortBy))
-            : customers.sort(desc(sortBy));
+        if (sortBy) {
+            const sortASC = order > 0;
+            return sortASC
+                ? customers.sort(asc(sortBy))
+                : customers.sort(desc(sortBy));
+        }
+        return customers;
     }
 
     async save(customer: Customer): Promise<void> {

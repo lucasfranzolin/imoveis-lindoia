@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { verify } from 'jsonwebtoken';
 
-import { config } from '../../../config/config';
+import { config } from '../../config/config';
 import { ApiError } from '../ApiError';
 
 const headerKey = 'Authorization';

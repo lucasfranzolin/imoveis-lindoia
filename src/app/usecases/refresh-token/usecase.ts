@@ -1,5 +1,8 @@
+import httpStatus from 'http-status';
 import { Session } from '../../../core/entities/Session';
+import { ApiError } from '../../ApiError';
 import { ITokenProvider } from '../../providers/interfaces/ITokenProvider';
+import { IRealtorsRepository } from '../../repositories/IRealtorsRepository';
 import { ISessionsRepository } from '../../repositories/ISessionsRepository';
 
 type RequestDTO = {
@@ -14,6 +17,7 @@ type ResponseDTO = Promise<{
 export class RefreshTokenUseCase {
     constructor(
         private sessionsRepository: ISessionsRepository,
+        private realtorsRepository: IRealtorsRepository,
         private tokenProvider: ITokenProvider
     ) {}
 
@@ -22,10 +26,14 @@ export class RefreshTokenUseCase {
             sessionId
         );
         if (!currentSession) {
-            throw new Error('Sessão inválida.');
+            throw new ApiError(httpStatus.NOT_FOUND, 'Sessão inválida.');
         }
         const { realtorId, expiresIn } = currentSession.props;
-        const token = this.tokenProvider.generate(realtorId);
+        const realtor = await this.realtorsRepository.findById(realtorId);
+        if (!realtor) {
+            throw new ApiError(httpStatus.NOT_FOUND, 'O corretor não existe.');
+        }
+        const token = this.tokenProvider.generate(realtor);
         if (this.tokenProvider.isExpired(expiresIn)) {
             const newSession = await this.sessionsRepository.refresh(
                 sessionId,

@@ -1,6 +1,7 @@
 import { getUnixTime } from 'date-fns';
 
 import { Session } from '../../../core/entities/Session';
+import { InMemoryRealtorsRepository } from '../../../test-utils/repositories/InMemoryRealtorsRepository';
 import { InMemorySessionsRepository } from '../../../test-utils/repositories/InMemorySessionsRepository';
 import { ITokenProvider } from '../../providers/interfaces/ITokenProvider';
 import { TokenProvider } from '../../providers/TokenProvider';
@@ -8,17 +9,24 @@ import { RefreshTokenUseCase } from './usecase';
 
 describe('refresh-token', () => {
     let sessionsRepository: InMemorySessionsRepository;
+    let realtorsRepository: InMemoryRealtorsRepository;
     let tokenProvider: ITokenProvider;
     let sut: RefreshTokenUseCase;
 
     beforeEach(() => {
         sessionsRepository = new InMemorySessionsRepository();
+        realtorsRepository = new InMemoryRealtorsRepository();
         tokenProvider = new TokenProvider();
-        sut = new RefreshTokenUseCase(sessionsRepository, tokenProvider);
+        sut = new RefreshTokenUseCase(
+            sessionsRepository,
+            realtorsRepository,
+            tokenProvider
+        );
     });
 
     afterEach(() => {
         sessionsRepository.items = [];
+        realtorsRepository.items = [];
     });
 
     it('should check if session is valid', async () => {

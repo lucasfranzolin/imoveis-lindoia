@@ -1,5 +1,5 @@
-import { Entity } from '../../core/domain/Entity';
-import { DealMediation, Note, Schedule } from '../../core/types';
+import { Entity } from '../domain/Entity';
+import { DealMediation, Note, Schedule } from '../types';
 
 export type Props = DealMediation & {
     schedule: Schedule;

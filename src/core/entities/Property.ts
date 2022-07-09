@@ -1,18 +1,14 @@
-import { Entity } from '../../core/domain/Entity';
-import {
-    Price,
-    PropertyPurpose,
-    PropertyType,
-    Address,
-} from '../../core/types';
+import { Entity } from '../domain/Entity';
+import { Price, Address } from '../types';
+import { PropertyPurposeEnum, PropertyTypeEnum } from '../enums';
 
 export type Props = {
     address: Address;
     ownerId: string;
-    purpose: PropertyPurpose;
+    purpose: PropertyPurposeEnum;
     rent: Price;
     sale: Price;
-    type: PropertyType;
+    type: PropertyTypeEnum;
 };
 
 export class Property extends Entity<Props> {

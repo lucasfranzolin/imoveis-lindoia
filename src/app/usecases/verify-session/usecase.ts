@@ -8,18 +8,13 @@ type RequestDTO = {
 
 type ResponseDTO = Promise<void>;
 
-export class LogoutRealtorUseCase {
+export class VerifySessionUseCase {
     constructor(private sessionsRepository: ISessionsRepository) {}
 
     async execute({ sessionId }: RequestDTO): ResponseDTO {
-        const currentSession = await this.sessionsRepository.findById(
-            sessionId
-        );
-        if (!currentSession) {
-            throw new ApiError(httpStatus.NOT_FOUND, 'Sessão inválida.');
+        const session = await this.sessionsRepository.findById(sessionId);
+        if (!session) {
+            throw new ApiError(httpStatus.NOT_FOUND, 'Sessão não encontrada.');
         }
-        await this.sessionsRepository.deleteAllByRealtorId(
-            currentSession.props.realtorId
-        );
     }
 }

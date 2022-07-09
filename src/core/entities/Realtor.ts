@@ -1,5 +1,5 @@
-import { Address } from '../../core/types';
-import { Entity } from '../../core/domain/Entity';
+import { Address } from '../types';
+import { Entity } from '../domain/Entity';
 
 export type Props = {
     address?: Address;
