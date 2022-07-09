@@ -1,36 +1,34 @@
+import { Realtor } from '../../../core/entities/Realtor';
 import { Session } from '../../../core/entities/Session';
-import { InMemorySessionsRepository } from '../../../test-utils/repositories/InMemorySessionsRepository';
+import { InMemoryRealtorsRepository } from '../../../test-utils/repositories/InMemoryRealtorsRepository';
 import { FindRealtorByIdUseCase } from './usecase';
 
-describe('logout-realtor', () => {
-    let sessionsRepository: InMemorySessionsRepository;
+describe('find-realtor-by-id', () => {
+    let realtorsRepository: InMemoryRealtorsRepository;
     let sut: FindRealtorByIdUseCase;
 
     beforeEach(() => {
-        sessionsRepository = new InMemorySessionsRepository();
-        sut = new FindRealtorByIdUseCase(sessionsRepository);
+        realtorsRepository = new InMemoryRealtorsRepository();
+        sut = new FindRealtorByIdUseCase(realtorsRepository);
     });
 
     afterEach(() => {
-        sessionsRepository.items = [];
+        realtorsRepository.items = [];
     });
 
-    it('should check if session is valid', async () => {
-        await expect(sut.execute({ sessionId: 'invalidId' })).rejects.toThrow();
+    it('should throw', async () => {
+        await expect(sut.execute({ realtorId: 'test' })).rejects.toThrow();
     });
 
-    it('should delete session', async () => {
-        const mockSessionId = 'test123';
-        const session = Session.create(
-            {
-                realtorId: 'xxxx',
-                expiresIn: 0,
-            },
-            mockSessionId
-        );
-        sessionsRepository.items.push(session);
-        expect(sessionsRepository.items.length).toBe(1);
-        await sut.execute({ sessionId: mockSessionId });
-        expect(sessionsRepository.items.length).toBe(0);
+    it('should find realtor', async () => {
+        const realtor = Realtor.create({
+            email: 'email@test.jest',
+            password: '123',
+        });
+        expect(realtorsRepository.items.length).toBe(0);
+        realtorsRepository.items.push(realtor);
+        expect(realtorsRepository.items.length).toBe(1);
+        const result = await sut.execute({ realtorId: realtor.id });
+        expect(result).toBe(realtor);
     });
 });
