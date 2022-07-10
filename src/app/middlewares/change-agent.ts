@@ -30,7 +30,7 @@ export const changeAgent = async (
             new ApiError(
                 httpStatus.NOT_FOUND,
                 httpStatus[httpStatus.NOT_FOUND],
-                `'${headerKey}' is not valid!`
+                `'${headerKey}: ${changeAgent}' is not a valid realtor!`
             )
         );
     }

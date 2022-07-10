@@ -11,7 +11,7 @@ type RequestDTO = {
 
 type ResponseDTO = Promise<void>;
 
-export class SignUpRealtorUseCase {
+export class RegisterRealtorUseCase {
     constructor(
         private realtorsRepository: IRealtorsRepository,
         private passwordProvider: IPasswordProvider

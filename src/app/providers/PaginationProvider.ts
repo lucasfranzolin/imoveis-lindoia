@@ -8,9 +8,6 @@ export class PaginationProvider implements IPaginationProvider {
     private defaultOrder: 1 | -1 = 1;
     private firstPage: number = 0;
 
-    /**
-     * @throws {Error}
-     */
     validate<T>(
         {
             limit = this.minLimit,

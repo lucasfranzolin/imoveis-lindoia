@@ -24,7 +24,7 @@ app.use(cors());
 
 app.use(router);
 app.use((req, res, next) => {
-    next(new ApiError(httpStatus.NOT_FOUND, 'Route does not exist.'));
+    next(new ApiError(httpStatus.NOT_FOUND, 'Route not found.'));
 });
 
 app.use(errorConverter);

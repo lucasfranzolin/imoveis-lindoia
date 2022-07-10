@@ -7,7 +7,7 @@ import { app } from './app';
 
 let server: Server;
 
-mongo.connect(config.mongo.url).then(() => {
+mongo.connect().then(() => {
     logger.info('Connected to MongoDB');
     server = app.listen(config.port, () => {
         logger.info(`Server is listening on port ${config.port}`);

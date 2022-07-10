@@ -5,7 +5,7 @@ import { loginRealtorUseCase } from '../usecases/login-realtor';
 import { logoutRealtorUseCase } from '../usecases/logout-realtor';
 import { refreshTokenUseCase } from '../usecases/refresh-token';
 import { verifySessionUseCase } from '../usecases/verify-session';
-import { signUpRealtorUseCase } from '../usecases/signup-realtor';
+import { registerRealtorUseCase } from '../usecases/register-realtor';
 
 export async function login(
     req: Request,
@@ -70,7 +70,7 @@ export async function register(
 ): Promise<void> {
     const { email, password } = req.body;
     try {
-        await signUpRealtorUseCase.execute({ email, password });
+        await registerRealtorUseCase.execute({ email, password });
         res.status(httpStatus.OK).send();
     } catch (err) {
         next(err);

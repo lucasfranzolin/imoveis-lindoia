@@ -4,9 +4,9 @@ import { config } from './config';
 
 let connection: MongoClient | null;
 
-const connect = (url: string): Promise<MongoClient> => {
+const connect = (): Promise<MongoClient> => {
     if (!connection) {
-        connection = new MongoClient(url);
+        connection = new MongoClient(config.mongo.url);
     }
     return connection.connect();
 };
