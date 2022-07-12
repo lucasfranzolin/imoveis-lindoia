@@ -11,7 +11,7 @@ export async function paginate(
 ): Promise<void> {
     try {
         const result = await listCustomersUseCase.execute(req.query as any);
-        res.status(httpStatus.OK).json(result);
+        res.json(result);
     } catch (err) {
         next(err);
     }
@@ -22,9 +22,8 @@ export async function save(
     res: Response,
     next: NextFunction
 ): Promise<void> {
-    const { email, fullName, phone } = req.body;
     try {
-        await saveCustomerUseCase.execute({ email, fullName, phone });
+        await saveCustomerUseCase.execute(req.body);
         res.status(httpStatus.OK).send();
     } catch (err) {
         next(err);

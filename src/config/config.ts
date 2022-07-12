@@ -30,12 +30,17 @@ const envVarsSchema = Joi.object()
         MONGO_DB_NAME: Joi.string()
             .default(process.env.MONGO_DB_NAME)
             .required(),
-        JWT_SECRET: Joi.string().default(process.env.JWT_SECRET).required(),
-        JWT_TOKEN_DURATION_IN_MINUTES: Joi.number()
-            .default(Number(process.env.JWT_TOKEN_DURATION_IN_MINUTES))
+        MAIL_NAME: Joi.string().default(process.env.MAIL_NAME).required(),
+        MAIL_ADDRESS: Joi.string().default(process.env.MAIL_ADDRESS).required(),
+        MAIL_HOST: Joi.string().default(process.env.MAIL_HOST).required(),
+        MAIL_PORT: Joi.number()
+            .default(Number(process.env.MAIL_PORT))
             .required(),
-        JWT_REFRESH_DURATION_IN_DAYS: Joi.number()
-            .default(Number(process.env.JWT_REFRESH_DURATION_IN_DAYS))
+        MAIL_AUTH_USER: Joi.string()
+            .default(process.env.MAIL_AUTH_USER)
+            .required(),
+        MAIL_AUTH_PASSWORD: Joi.string()
+            .default(process.env.MAIL_AUTH_PASSWORD)
             .required(),
     })
     .unknown();
@@ -63,9 +68,15 @@ export const config = {
         url: `mongodb+srv://${envVars.MONGO_USER}:${envVars.MONGO_PASSWORD}@${envVars.MONGO_CLUSTER_NAME}.sl2p2.mongodb.net`,
         dbName: envVars.MONGO_DB_NAME,
     },
-    jwt: {
-        secret: envVars.JWT_SECRET,
-        tokenExpiresIn: envVars.JWT_TOKEN_DURATION_IN_MINUTES,
-        refreshExpiresIn: envVars.JWT_REFRESH_DURATION_IN_DAYS,
+    mail: {
+        domain: envVars.MAIL_ADDRESS.split('@')[1],
+        name: envVars.MAIL_NAME,
+        address: envVars.MAIL_ADDRESS,
+        host: envVars.MAIL_HOST,
+        port: envVars.MAIL_PORT,
+        auth: {
+            user: envVars.MAIL_AUTH_USER,
+            password: envVars.MAIL_AUTH_PASSWORD,
+        },
     },
 };

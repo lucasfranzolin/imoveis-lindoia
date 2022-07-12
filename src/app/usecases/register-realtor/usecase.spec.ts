@@ -5,9 +5,12 @@ import { InMemoryRealtorsRepository } from '../../../test-utils/repositories/InM
 import { IPasswordProvider } from '../../providers/interfaces/IPasswordProvider';
 import { PasswordProvider } from '../../providers/PasswordProvider';
 import { RegisterRealtorUseCase } from './usecase';
+import { IMailProvider } from '../../providers/interfaces/IMailProvider';
+import { MailProvider } from '../../providers/MailProvider';
 
 const mock = {
     email: 'test@imoveislindoia.com.br',
+    name: 'tester top',
     password: '123',
 };
 
@@ -15,13 +18,19 @@ describe('signup-realtor', () => {
     let data: any;
     let realtorsRepository: InMemoryRealtorsRepository;
     let passwordProvider: IPasswordProvider;
+    let mailProvider: IMailProvider;
     let sut: RegisterRealtorUseCase;
 
     beforeEach(() => {
         data = dcopy(mock);
         realtorsRepository = new InMemoryRealtorsRepository();
         passwordProvider = new PasswordProvider();
-        sut = new RegisterRealtorUseCase(realtorsRepository, passwordProvider);
+        mailProvider = new MailProvider();
+        sut = new RegisterRealtorUseCase(
+            realtorsRepository,
+            passwordProvider,
+            mailProvider
+        );
     });
 
     afterEach(() => {
