@@ -17,19 +17,19 @@ export class PaginationProvider implements IPaginationProvider {
         }: Pagination<T>,
         allowedSortBy: Array<keyof T> = []
     ): Pagination<T> | never {
-        if (limit < this.minLimit) {
+        if (Number(limit) < this.minLimit) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
                 `Valor de 'limit' deve ser no minimo ${this.minLimit}.`
             );
         }
-        if (![-1, 1].includes(order)) {
+        if (![-1, 1].includes(Number(order))) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
                 `O parametro 'order' é inválido, valores permitidos: 1 (ASC) ou -1 (DESC).`
             );
         }
-        if (page < this.firstPage) {
+        if (Number(page) < this.firstPage) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
                 `A primeira página sempre será a ${this.firstPage}.`
@@ -46,9 +46,9 @@ export class PaginationProvider implements IPaginationProvider {
             );
         }
         return {
-            limit,
-            order,
-            page,
+            limit: Number(limit),
+            order: Number(order) as any,
+            page: Number(page),
             sortBy,
         };
     }

@@ -1,4 +1,4 @@
-import { Pagination } from '../../../core/types';
+import { Pagination, PaginationResult } from '../../../core/types';
 import {
     Customer,
     Props as CustomerProps,
@@ -8,7 +8,7 @@ import { IPaginationProvider } from '../../providers/interfaces/IPaginationProvi
 
 export type RequestDTO = Pagination<CustomerProps>;
 
-type ResponseDTO = Promise<Array<Customer>>;
+type ResponseDTO = Promise<PaginationResult<Customer>>;
 
 export class ListCustomersUseCase {
     constructor(
@@ -20,6 +20,14 @@ export class ListCustomersUseCase {
         const query = this.paginationProvider.validate<CustomerProps>(params, [
             'fullName',
         ]);
-        return await this.customersRepository.list(query);
+        const docs = await this.customersRepository.list(query);
+        const count = await this.customersRepository.count();
+        const candidatePages = Math.ceil(count / params.limit);
+        const pages = candidatePages === 0 ? 1 : candidatePages;
+        return {
+            docs,
+            pages,
+            count,
+        };
     }
 }

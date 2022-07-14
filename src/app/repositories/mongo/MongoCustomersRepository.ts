@@ -9,6 +9,15 @@ import { ICustomersRepository } from '../ICustomersRepository';
 const collection = 'customers';
 
 export class MongoCustomersRepository implements ICustomersRepository {
+    async count(): Promise<number> {
+        return await mongo.getDb().collection(collection).countDocuments();
+    }
+
+    async deleteById(customerId: string): Promise<void> {
+        const filter = { uuid: customerId };
+        await mongo.getDb().collection(collection).deleteOne(filter);
+    }
+
     async findByEmail(email: string): Promise<Customer | null> {
         const filter = { 'props.email': email };
         const doc = await mongo.getDb().collection(collection).findOne(filter);
@@ -52,5 +61,17 @@ export class MongoCustomersRepository implements ICustomersRepository {
             .getDb()
             .collection(collection)
             .insertOne({ ...customer });
+    }
+
+    async updateById(
+        customerId: string,
+        props: CustomerProps
+    ): Promise<Customer> {
+        const filter = { uuid: customerId };
+        const doc = await mongo
+            .getDb()
+            .collection(collection)
+            .findOneAndUpdate(filter, { $set: { props } });
+        return Customer.create(doc.value!.props, doc.value!.uuid);
     }
 }

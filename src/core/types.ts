@@ -36,3 +36,9 @@ export type Pagination<T> = {
     page: number;
     sortBy?: keyof T;
 };
+
+export type PaginationResult<T> = {
+    count: number;
+    docs: Array<T>;
+    pages: number;
+};
