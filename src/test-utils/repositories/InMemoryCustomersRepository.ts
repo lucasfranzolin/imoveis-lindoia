@@ -6,6 +6,16 @@ import { asc, desc } from '../sortEntities';
 export class InMemoryCustomersRepository implements ICustomersRepository {
     public items: Customer[] = [];
 
+    async count(): Promise<number> {
+        return this.items.length;
+    }
+
+    async deleteById(customerId: string): Promise<void> {
+        this.items = this.items.filter(
+            (customer) => customer.id !== customerId
+        );
+    }
+
     async findByEmail(email: string): Promise<Customer | null> {
         const customer = this.items.find(
             (customer) => customer.props.email === email
@@ -41,5 +51,17 @@ export class InMemoryCustomersRepository implements ICustomersRepository {
 
     async save(customer: Customer): Promise<void> {
         this.items.push(customer);
+    }
+
+    async updateById(
+        customerId: string,
+        props: CustomerProps
+    ): Promise<Customer> {
+        const updatedCustomer = Customer.create(props, customerId);
+        this.items = this.items.map((customer) => {
+            if (customer.id === customerId) return updatedCustomer;
+            return customer;
+        });
+        return updatedCustomer;
     }
 }

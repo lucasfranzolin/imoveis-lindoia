@@ -9,6 +9,7 @@ export type Props = {
     rent: Price;
     sale: Price;
     type: PropertyTypeEnum;
+    registry: string;
 };
 
 export class Property extends Entity<Props> {

@@ -4,6 +4,7 @@ export type Props = {
     email: string;
     fullName: string;
     phone: string;
+    cpf: string;
 };
 
 export class Customer extends Entity<Props> {

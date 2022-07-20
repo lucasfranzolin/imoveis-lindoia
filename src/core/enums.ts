@@ -1,20 +1,19 @@
 export enum DealEnum {
-    SALE = 'SALE',
-    RENT = 'RENT',
+    SALE = 'venda',
+    RENT = 'aluguel',
 }
 
 export enum PropertyPurposeEnum {
-    BUSINESS = 'BUSINESS',
-    HOME = 'HOME',
+    BUSINESS = 'comercial',
+    HOME = 'moradia',
 }
 
 export enum PropertyTypeEnum {
-    APARTMENT = 'APARTMENT',
-    FARM = 'FARM',
-    FLOOR = 'FLOOR',
-    HOTEL = 'HOTEL',
-    HOUSE = 'HOUSE',
-    LAND = 'LAND',
-    ROOM = 'ROOM',
-    SET = 'SET',
+    APARTMENT = 'apartamento',
+    FARM = 'fazenda',
+    FLOOR = 'andar',
+    HOTEL = 'hotel',
+    HOUSE = 'casa',
+    LAND = 'terreno',
+    ROOM = 'sala',
 }

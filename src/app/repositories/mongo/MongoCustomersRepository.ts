@@ -44,9 +44,7 @@ export class MongoCustomersRepository implements ICustomersRepository {
         ];
         if (sortBy) {
             const by = `props.${sortBy}`;
-            agg.push(
-                { $sort: { [by]: order } } as any //
-            );
+            agg.unshift({ $sort: { [by]: order } } as any);
         }
         const docs = await mongo
             .getDb()

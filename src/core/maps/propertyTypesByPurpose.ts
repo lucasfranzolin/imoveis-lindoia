@@ -7,7 +7,6 @@ export const propertyTypesByPurpose: {
         PropertyTypeEnum.FLOOR,
         PropertyTypeEnum.HOTEL,
         PropertyTypeEnum.ROOM,
-        PropertyTypeEnum.SET,
     ],
     [PropertyPurposeEnum.HOME]: [
         PropertyTypeEnum.APARTMENT,

@@ -19,6 +19,8 @@ export class ListCustomersUseCase {
     async execute(params: RequestDTO): ResponseDTO {
         const query = this.paginationProvider.validate<CustomerProps>(params, [
             'fullName',
+            'email',
+            'phone',
         ]);
         const docs = await this.customersRepository.list(query);
         const count = await this.customersRepository.count();

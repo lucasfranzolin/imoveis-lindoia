@@ -1,6 +1,7 @@
 export type Address = {
     state: string;
     city: string;
+    district: string;
     street: string;
     number: string;
     zip: string;
@@ -26,7 +27,6 @@ export type Note = {
 
 export type Price = {
     isAnnounced: boolean;
-    range: [min: number, max: number];
     value: number;
 };
 

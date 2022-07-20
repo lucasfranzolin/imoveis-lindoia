@@ -8,6 +8,7 @@ type RequestDTO = {
     email: string;
     fullName: string;
     phone: string;
+    cpf: string;
 };
 
 type ResponseDTO = Promise<Customer>;

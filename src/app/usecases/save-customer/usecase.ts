@@ -8,6 +8,7 @@ export type RequestDTO = {
     email: string;
     fullName: string;
     phone: string;
+    cpf: string;
 };
 
 type ResponseDTO = Promise<void>;
@@ -18,20 +19,16 @@ export class SaveCustomerUseCase {
         private phoneProvider: IPhoneProvider
     ) {}
 
-    async execute({ email, fullName, phone }: RequestDTO): ResponseDTO {
-        this.phoneProvider.validate(phone);
-        const customer = await this.customersRepository.findByEmail(email);
+    async execute(data: RequestDTO): ResponseDTO {
+        this.phoneProvider.validate(data.phone);
+        const customer = await this.customersRepository.findByEmail(data.email);
         if (customer) {
             throw new ApiError(
                 httpStatus.CONFLICT,
                 'O email fornecido já está em uso.'
             );
         }
-        const newCustomer = Customer.create({
-            email,
-            fullName,
-            phone,
-        });
+        const newCustomer = Customer.create(data);
         await this.customersRepository.save(newCustomer);
     }
 }
