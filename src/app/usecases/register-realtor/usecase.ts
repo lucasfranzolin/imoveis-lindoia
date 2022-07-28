@@ -12,8 +12,6 @@ type RequestDTO = {
     password: string;
 };
 
-type ResponseDTO = Promise<void>;
-
 export class RegisterRealtorUseCase {
     constructor(
         private realtorsRepository: IRealtorsRepository,
@@ -21,7 +19,7 @@ export class RegisterRealtorUseCase {
         private mailProvider: IMailProvider
     ) {}
 
-    async execute({ email, name, password }: RequestDTO): ResponseDTO {
+    async execute({ email, name, password }: RequestDTO): Promise<void> {
         const [, domain] = email.split('@');
         if (domain.toLowerCase() !== config.mail.domain) {
             throw new ApiError(

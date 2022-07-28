@@ -11,15 +11,13 @@ export type RequestDTO = {
     cpf: string;
 };
 
-type ResponseDTO = Promise<void>;
-
 export class SaveCustomerUseCase {
     constructor(
         private customersRepository: ICustomersRepository,
         private phoneProvider: IPhoneProvider
     ) {}
 
-    async execute(data: RequestDTO): ResponseDTO {
+    async execute(data: RequestDTO): Promise<void> {
         this.phoneProvider.validate(data.phone);
         const customer = await this.customersRepository.findByEmail(data.email);
         if (customer) {

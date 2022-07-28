@@ -8,15 +8,13 @@ import { IPaginationProvider } from '../../providers/interfaces/IPaginationProvi
 
 export type RequestDTO = Pagination<CustomerProps>;
 
-type ResponseDTO = Promise<PaginationResult<Customer>>;
-
 export class ListCustomersUseCase {
     constructor(
         private customersRepository: ICustomersRepository,
         private paginationProvider: IPaginationProvider
     ) {}
 
-    async execute(params: RequestDTO): ResponseDTO {
+    async execute(params: RequestDTO): Promise<PaginationResult<Customer>> {
         const query = this.paginationProvider.validate<CustomerProps>(params, [
             'fullName',
             'email',

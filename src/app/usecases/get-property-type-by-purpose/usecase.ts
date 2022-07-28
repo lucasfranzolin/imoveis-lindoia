@@ -5,12 +5,10 @@ type RequestDTO = {
     purpose: PropertyPurposeEnum;
 };
 
-type ResponseDTO = Promise<Array<PropertyTypeEnum>>;
-
 export class GetPropertyTypeByPurposeUseCase {
     constructor() {}
 
-    async execute({ purpose }: RequestDTO): ResponseDTO {
+    async execute({ purpose }: RequestDTO): Promise<Array<PropertyTypeEnum>> {
         return propertyTypesByPurpose[purpose];
     }
 }

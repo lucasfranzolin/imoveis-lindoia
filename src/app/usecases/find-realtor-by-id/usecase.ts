@@ -7,12 +7,10 @@ type RequestDTO = {
     realtorId: string;
 };
 
-type ResponseDTO = Promise<Realtor>;
-
 export class FindRealtorByIdUseCase {
     constructor(private realtorsRepository: IRealtorsRepository) {}
 
-    async execute({ realtorId }: RequestDTO): ResponseDTO {
+    async execute({ realtorId }: RequestDTO): Promise<Realtor> {
         const realtor = await this.realtorsRepository.findById(realtorId);
         if (!realtor) {
             throw new ApiError(

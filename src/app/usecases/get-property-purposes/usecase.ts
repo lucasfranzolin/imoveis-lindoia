@@ -1,11 +1,9 @@
 import { PropertyPurposeEnum } from '../../../core/enums';
 
-type ResponseDTO = Promise<Array<string>>;
-
 export class GetPropertyPurposesUseCase {
     constructor() {}
 
-    async execute(): ResponseDTO {
+    async execute(): Promise<Array<string>> {
         return Object.values(PropertyPurposeEnum);
     }
 }

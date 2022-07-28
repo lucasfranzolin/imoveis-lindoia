@@ -41,6 +41,7 @@ module.exports = {
         quotes: ['error', 'single'],
         semi: ['error', 'always'],
         'no-useless-constructor': 'off',
+        'no-unused-vars': 'error',
     },
     overrides: [
         {

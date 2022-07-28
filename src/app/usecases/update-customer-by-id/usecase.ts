@@ -11,12 +11,10 @@ type RequestDTO = {
     cpf: string;
 };
 
-type ResponseDTO = Promise<Customer>;
-
 export class UpdateCustomerByIdUseCase {
     constructor(private customersRepository: ICustomersRepository) {}
 
-    async execute({ id, ...rest }: RequestDTO): ResponseDTO {
+    async execute({ id, ...rest }: RequestDTO): Promise<Customer> {
         let customer = await this.customersRepository.findById(id);
         if (!customer) {
             throw new ApiError(httpStatus.NOT_FOUND, 'Cliente não encontrado.');

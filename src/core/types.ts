@@ -42,3 +42,8 @@ export type PaginationResult<T> = {
     docs: Array<T>;
     pages: number;
 };
+
+export type PropertyMediaMetadata = {
+    description: string;
+    index: string;
+};
