@@ -22,8 +22,7 @@ export class ListCustomersUseCase {
         ]);
         const docs = await this.customersRepository.list(query);
         const count = await this.customersRepository.count();
-        const candidatePages = Math.ceil(count / params.limit);
-        const pages = candidatePages === 0 ? 1 : candidatePages;
+        const pages = this.paginationProvider.calcPages(count, params.limit);
         return {
             docs,
             pages,

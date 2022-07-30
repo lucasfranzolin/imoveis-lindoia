@@ -1,9 +1,10 @@
 import * as winston from 'winston';
+import { ApiError } from '../app/ApiError';
 
 import { config } from './config';
 
 const enumerateErrorFormat = winston.format((info) => {
-    if (info instanceof Error) {
+    if (info instanceof Error || info instanceof ApiError) {
         Object.assign(info, { message: info.stack });
     }
     return info;

@@ -2,12 +2,10 @@ import formidable from 'formidable';
 import { PropertyMediaMetadata } from '../../../core/types';
 
 export interface IAWSProvider {
+    listObjects(bucketName: string, folder: string): Promise<Array<string>>;
     uploadToS3(
         bucketName: string,
         referenceId: string,
-        dataArr: Array<{
-            file: formidable.File;
-            metadata: PropertyMediaMetadata;
-        }>
+        files: Array<formidable.File>
     ): Promise<string[]>;
 }

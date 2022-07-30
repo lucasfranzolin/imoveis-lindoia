@@ -10,8 +10,9 @@ import { getPropertyPurposesUseCase } from '../usecases/get-property-purposes';
 import { getPropertyTypeByPurposeUseCase } from '../usecases/get-property-type-by-purpose';
 import { savePropertyUseCase } from '../usecases/save-property';
 import { storePropertyMediaUseCase } from '../usecases/store-property-media';
-import { ApiError } from '../ApiError';
-import { PropertyMediaMetadata } from '../../core/types';
+import { listPropertiesUseCase } from '../usecases/list-properties';
+import { getPropertyMediaUseCase } from '../usecases/get-property-media';
+import { findPropertyByIdUseCase } from '../usecases/find-property-by-id';
 
 export async function save(
     req: Request,
@@ -20,7 +21,7 @@ export async function save(
 ): Promise<void> {
     try {
         const result = await savePropertyUseCase.execute(req.body);
-        res.json(result);
+        res.status(httpStatus.CREATED).json(result);
     } catch (err) {
         next(err);
     }
@@ -33,7 +34,7 @@ export async function getPurposes(
 ): Promise<void> {
     try {
         const result = await getPropertyPurposesUseCase.execute();
-        res.json(result);
+        res.status(httpStatus.OK).json(result);
     } catch (err) {
         next(err);
     }
@@ -49,7 +50,7 @@ export async function getTypesByPurpose(
         const result = await getPropertyTypeByPurposeUseCase.execute({
             purpose: purpose as PropertyPurposeEnum,
         });
-        res.json(result);
+        res.status(httpStatus.OK).json(result);
     } catch (err) {
         next(err);
     }
@@ -81,26 +82,65 @@ export async function storeMedia(
             options.keepExtensions = true;
         }
 
-        const formData: any = await new Promise((resolve, reject) =>
+        const files: any = await new Promise((resolve, reject) =>
             new formidable.IncomingForm(options).parse(
                 req,
                 (err, fields, files) => {
                     if (err) reject(err);
-                    const metadataList = JSON.parse(fields.metadata as string);
-                    resolve({
-                        files: Array.isArray(files.files)
+                    resolve(
+                        Array.isArray(files.files)
                             ? (files.files as Array<formidable.File>)
-                            : [files.files],
-                        metadataList,
-                    });
+                            : [files.files]
+                    );
                 }
             )
         );
         const result = await storePropertyMediaUseCase.execute({
             id,
-            ...formData,
+            files,
         });
-        res.json(result);
+        res.status(httpStatus.CREATED).json(result);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function paginate(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    try {
+        const result = await listPropertiesUseCase.execute(req.query as any);
+        res.status(httpStatus.OK).json(result);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function getMedia(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const { id } = req.params;
+    try {
+        const result = await getPropertyMediaUseCase.execute({ id });
+        res.status(httpStatus.OK).json(result);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function get(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const { id } = req.params;
+    try {
+        const result = await findPropertyByIdUseCase.execute({ id });
+        res.status(httpStatus.OK).json(result);
     } catch (err) {
         next(err);
     }

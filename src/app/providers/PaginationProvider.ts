@@ -1,3 +1,4 @@
+import { count } from 'console';
 import httpStatus from 'http-status';
 import { Pagination } from '../../core/types';
 import { ApiError } from '../ApiError';
@@ -7,6 +8,12 @@ export class PaginationProvider implements IPaginationProvider {
     private minLimit: number = 10;
     private defaultOrder: 1 | -1 = 1;
     private firstPage: number = 0;
+
+    calcPages(total: number, limit: number) {
+        const candidatePages = Math.ceil(total / limit);
+        const pages = candidatePages === 0 ? 1 : candidatePages;
+        return pages;
+    }
 
     validate<T>(
         {

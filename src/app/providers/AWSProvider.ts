@@ -4,8 +4,6 @@ import formidable from 'formidable';
 import fs from 'fs';
 
 import { config } from '../../config/config';
-import { logger } from '../../config/logger';
-import { PropertyMediaMetadata } from '../../core/types';
 import { IAWSProvider } from './interfaces/IAWSProvider';
 
 export class AWSProvider implements IAWSProvider {
@@ -19,16 +17,30 @@ export class AWSProvider implements IAWSProvider {
         });
     }
 
-    uploadToS3(
+    async listObjects(
+        bucketName: string,
+        folder: string
+    ): Promise<Array<string>> {
+        const params: AWS.S3.ListObjectsV2Request = {
+            Bucket: bucketName,
+            Delimiter: '/',
+            Prefix: folder + '/',
+        };
+        const data = await this.s3.listObjectsV2(params).promise();
+        const Keys = data.Contents!.map((content) => content.Key);
+        const downloadUrls = await Promise.all(
+            Keys.map((key) => this.getObjectUrl(bucketName, key!))
+        );
+        return downloadUrls;
+    }
+
+    async uploadToS3<T>(
         bucketName: string,
         referenceId: string,
-        dataArr: Array<{
-            file: formidable.File;
-            metadata: PropertyMediaMetadata;
-        }>
+        files: Array<formidable.File>
     ): Promise<string[]> {
-        return Promise.all(
-            dataArr.map((data) =>
+        return await Promise.all(
+            files.map((data) =>
                 this.execUploadToS3(bucketName, referenceId, data)
             )
         );
@@ -37,12 +49,9 @@ export class AWSProvider implements IAWSProvider {
     private async execUploadToS3(
         bucketName: string,
         referenceId: string,
-        data: {
-            file: formidable.File;
-            metadata: PropertyMediaMetadata;
-        }
+        data: formidable.File
     ): Promise<string> {
-        const { filepath, originalFilename } = data.file;
+        const { filepath, originalFilename } = data;
 
         const rawBytes = crypto.randomBytes(16);
         const imageName = rawBytes.toString('hex');
@@ -57,7 +66,6 @@ export class AWSProvider implements IAWSProvider {
             Body: fs.readFileSync(filepath),
             Bucket: bucketName,
             Key,
-            Metadata: data.metadata,
         };
 
         const downloadUrl: string = await new Promise((resolve, reject) => {
@@ -65,23 +73,39 @@ export class AWSProvider implements IAWSProvider {
                 .putObject(params)
                 .on('httpUploadProgress', ({ loaded, total }) => {
                     const pct = Math.round((loaded * 100) / total);
-                    logger.info(Key, pct);
                 })
                 .send((err, data) => {
                     if (err) reject(err);
-                    this.getObjectUrl(Key).then(resolve).catch(reject);
+                    this.getObjectUrl(bucketName, Key)
+                        .then(resolve)
+                        .catch(reject);
                 });
         });
         return downloadUrl;
     }
 
-    private async getObjectUrl(filename: string): Promise<string> {
+    private async getObjectUrl(
+        bucketName: string,
+        filename: string
+    ): Promise<string> {
         const params = {
-            Bucket: config.aws.s3.bucketName,
+            Bucket: bucketName,
             Key: filename,
         };
         const fullUrl = await this.s3.getSignedUrlPromise('putObject', params);
         const [objectUrl] = fullUrl.split('?');
         return objectUrl;
+    }
+
+    private async getObjectMetadata<T>(
+        bucketName: string,
+        Key: string
+    ): Promise<T> {
+        const params: AWS.S3.HeadObjectRequest = {
+            Bucket: bucketName,
+            Key,
+        };
+        const attr = await this.s3.headObject(params).promise();
+        return attr.Metadata as T;
     }
 }
