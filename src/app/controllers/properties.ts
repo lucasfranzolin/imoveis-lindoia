@@ -13,6 +13,7 @@ import { storePropertyMediaUseCase } from '../usecases/store-property-media';
 import { listPropertiesUseCase } from '../usecases/list-properties';
 import { getPropertyMediaUseCase } from '../usecases/get-property-media';
 import { findPropertyByIdUseCase } from '../usecases/find-property-by-id';
+import { updatePropertyByIdUseCase } from '../usecases/update-property-by-id';
 
 export async function save(
     req: Request,
@@ -140,6 +141,23 @@ export async function get(
     const { id } = req.params;
     try {
         const result = await findPropertyByIdUseCase.execute({ id });
+        res.status(httpStatus.OK).json(result);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function update(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const { id } = req.params;
+    try {
+        const result = await updatePropertyByIdUseCase.execute({
+            id,
+            ...req.body,
+        });
         res.status(httpStatus.OK).json(result);
     } catch (err) {
         next(err);

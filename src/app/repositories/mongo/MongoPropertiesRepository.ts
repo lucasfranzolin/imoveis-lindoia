@@ -9,6 +9,9 @@ import { IPropertiesRepository } from '../IPropertiesRepository';
 const collection = 'properties';
 
 export class MongoPropertiesRepository implements IPropertiesRepository {
+    private locationIndex: string = 'locationIndex';
+    private locationIndexExists: boolean = false;
+
     async count(): Promise<number> {
         return await mongo.getDb().collection(collection).countDocuments();
     }
@@ -17,10 +20,11 @@ export class MongoPropertiesRepository implements IPropertiesRepository {
         const filter = { uuid: customerId };
         const doc = await mongo.getDb().collection(collection).findOne(filter);
         if (!doc) return null;
-        return Property.create(doc.props, doc.uuid);
+        return doc as unknown as Property;
     }
 
     async save(property: Property): Promise<void> {
+        await this.checkLocationIndex();
         await mongo
             .getDb()
             .collection(collection)
@@ -46,6 +50,34 @@ export class MongoPropertiesRepository implements IPropertiesRepository {
             .collection(collection)
             .aggregate(agg)
             .toArray();
-        return docs.map((doc) => Property.create(doc.props, doc.uuid));
+        return docs as unknown as Array<Property>;
+    }
+
+    async updateById(propertyId: string, props: PropertyProps): Promise<void> {
+        const filter = { uuid: propertyId };
+        await mongo
+            .getDb()
+            .collection(collection)
+            .findOneAndUpdate(filter, { $set: { props } });
+    }
+
+    private async checkLocationIndex() {
+        if (this.locationIndexExists) return;
+
+        this.locationIndexExists = await mongo
+            .getDb()
+            .collection(collection)
+            .indexExists(this.locationIndex);
+
+        if (!this.locationIndexExists) {
+            await mongo.getDb().collection(collection).createIndex(
+                {
+                    location: 1,
+                },
+                {
+                    name: this.locationIndex,
+                }
+            );
+        }
     }
 }

@@ -1,6 +1,5 @@
-import httpStatus from 'http-status';
 import { Realtor } from '../../../core/entities/Realtor';
-import { ApiError } from '../../ApiError';
+import { RealtorNotFoundError } from '../../api-errors/RealtorNotFoundError';
 import { IRealtorsRepository } from '../../repositories/IRealtorsRepository';
 
 type RequestDTO = {
@@ -12,12 +11,8 @@ export class FindRealtorByIdUseCase {
 
     async execute({ realtorId }: RequestDTO): Promise<Realtor> {
         const realtor = await this.realtorsRepository.findById(realtorId);
-        if (!realtor) {
-            throw new ApiError(
-                httpStatus.NOT_FOUND,
-                'Corretor não encontrado.'
-            );
-        }
+        if (!realtor) throw new RealtorNotFoundError();
+
         return realtor;
     }
 }

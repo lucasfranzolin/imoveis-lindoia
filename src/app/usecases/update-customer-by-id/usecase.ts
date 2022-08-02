@@ -1,14 +1,10 @@
-import httpStatus from 'http-status';
 import { Customer } from '../../../core/entities/Customer';
-import { ApiError } from '../../ApiError';
+import { CustomerNotFoundError } from '../../api-errors/CustomerNotFoundError';
 import { ICustomersRepository } from '../../repositories/ICustomersRepository';
+import { RequestDTO as SaveRequestDTO } from '../save-customer/usecase';
 
-type RequestDTO = {
+type RequestDTO = SaveRequestDTO & {
     id: string;
-    email: string;
-    fullName: string;
-    phone: string;
-    cpf: string;
 };
 
 export class UpdateCustomerByIdUseCase {
@@ -16,9 +12,8 @@ export class UpdateCustomerByIdUseCase {
 
     async execute({ id, ...rest }: RequestDTO): Promise<Customer> {
         let customer = await this.customersRepository.findById(id);
-        if (!customer) {
-            throw new ApiError(httpStatus.NOT_FOUND, 'Cliente não encontrado.');
-        }
+        if (!customer) throw new CustomerNotFoundError();
+
         customer = await this.customersRepository.updateById(id, rest);
         return customer;
     }

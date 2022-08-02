@@ -1,3 +1,5 @@
+import { GeoType } from './enums';
+
 export type Address = {
     state: string;
     city: string;
@@ -43,7 +45,9 @@ export type PaginationResult<T> = {
     pages: number;
 };
 
-export type PropertyMediaMetadata = {
-    description: string;
-    index: string;
+export type PointCoordinates = [longitude: number, latitude: number];
+
+export type GeoJson<T> = {
+    type: GeoType;
+    coordinates: T;
 };

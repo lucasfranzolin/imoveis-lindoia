@@ -1,6 +1,5 @@
-import httpStatus from 'http-status';
 import { Property } from '../../../core/entities/Property';
-import { ApiError } from '../../ApiError';
+import { PropertyOwnerNotFoundError } from '../../api-errors/PropertyOwnerNotFoundError';
 import { IPropertiesRepository } from '../../repositories/IPropertiesRepository';
 
 type RequestDTO = {
@@ -12,9 +11,8 @@ export class FindPropertyByIdUseCase {
 
     async execute(data: RequestDTO): Promise<Property> {
         const property = await this.propertiesRepository.findById(data.id);
-        if (!property) {
-            throw new ApiError(httpStatus.NOT_FOUND, 'Imóvel não encontrado.');
-        }
+        if (!property) throw new PropertyOwnerNotFoundError();
+
         return property;
     }
 }

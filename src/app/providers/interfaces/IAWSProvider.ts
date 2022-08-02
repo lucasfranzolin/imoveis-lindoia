@@ -1,5 +1,4 @@
 import formidable from 'formidable';
-import { PropertyMediaMetadata } from '../../../core/types';
 
 export interface IAWSProvider {
     listObjects(bucketName: string, folder: string): Promise<Array<string>>;

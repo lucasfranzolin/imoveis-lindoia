@@ -1,7 +1,5 @@
-import httpStatus from 'http-status';
 import { Customer } from '../../../core/entities/Customer';
-import { ApiError } from '../../ApiError';
-import { IPhoneProvider } from '../../providers/interfaces/IPhoneProvider';
+import { EmailAlreadyBeingUsedError } from '../../api-errors/EmailAlreadyBeingUsedError';
 import { ICustomersRepository } from '../../repositories/ICustomersRepository';
 
 export type RequestDTO = {
@@ -12,20 +10,12 @@ export type RequestDTO = {
 };
 
 export class SaveCustomerUseCase {
-    constructor(
-        private customersRepository: ICustomersRepository,
-        private phoneProvider: IPhoneProvider
-    ) {}
+    constructor(private customersRepository: ICustomersRepository) {}
 
     async execute(data: RequestDTO): Promise<void> {
-        this.phoneProvider.validate(data.phone);
         const customer = await this.customersRepository.findByEmail(data.email);
-        if (customer) {
-            throw new ApiError(
-                httpStatus.CONFLICT,
-                'O email fornecido já está em uso.'
-            );
-        }
+        if (customer) throw new EmailAlreadyBeingUsedError(data.email);
+
         const newCustomer = Customer.create(data);
         await this.customersRepository.save(newCustomer);
     }

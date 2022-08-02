@@ -1,5 +1,6 @@
 import { Address } from '../types';
 import { Entity } from '../domain/Entity';
+import { config } from '../../config/config';
 
 export type Props = {
     address?: Address;
@@ -16,7 +17,11 @@ export class Realtor extends Entity<Props> {
     }
 
     static create(props: Props, id?: string): Realtor {
-        const realtor = new Realtor(props, id);
-        return realtor;
+        const [, domain] = props.email.split('@');
+        if (domain.toLowerCase() !== config.mail.domain) {
+            throw new Error(`O domínio '${domain}' não é permitido.`);
+        }
+
+        return new Realtor(props, id);
     }
 }

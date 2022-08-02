@@ -11,4 +11,5 @@ export interface IPropertiesRepository {
         page,
         sortBy,
     }: Pagination<PropertyProps>): Promise<Array<Property>>;
+    updateById(propertyId: string, props: PropertyProps): Promise<void>;
 }

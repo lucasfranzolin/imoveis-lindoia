@@ -1,11 +1,9 @@
 import formidable from 'formidable';
-import httpStatus from 'http-status';
 
 import { config } from '../../../config/config';
 import { IAWSProvider } from '../../providers/interfaces/IAWSProvider';
 import { IPropertiesRepository } from '../../repositories/IPropertiesRepository';
-import { ApiError } from '../../ApiError';
-import { PropertyMediaMetadata } from '../../../core/types';
+import { PropertyNotFoundError } from '../../api-errors/PropertyNotFoundError';
 
 type RequestDTO = {
     id: string;
@@ -20,9 +18,7 @@ export class StorePropertyMediaUseCase {
 
     async execute(data: RequestDTO): Promise<Array<string>> {
         const property = await this.propertiesRepository.findById(data.id);
-        if (!property) {
-            throw new ApiError(httpStatus.NOT_FOUND, 'Imóvel não encontrado.');
-        }
+        if (!property) throw new PropertyNotFoundError();
 
         return await this.awsProvider.uploadToS3(
             config.aws.s3.bucketName,

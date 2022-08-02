@@ -12,6 +12,7 @@ propertiesRouter.get('/:id/media', controller.getMedia);
 propertiesRouter.post('/:id/media', changeAgent, controller.storeMedia);
 
 propertiesRouter.get('/:id', controller.get);
+propertiesRouter.put('/:id', controller.update);
 
 propertiesRouter.get('/', controller.paginate);
 propertiesRouter.post('/', changeAgent, controller.save);

@@ -17,3 +17,7 @@ export enum PropertyTypeEnum {
     LAND = 'terreno',
     ROOM = 'sala',
 }
+
+export enum GeoType {
+    POINT = 'Point',
+}
