@@ -16,6 +16,11 @@ export class MongoPropertiesRepository implements IPropertiesRepository {
         return await mongo.getDb().collection(collection).countDocuments();
     }
 
+    async deleteById(propertyId: string): Promise<void> {
+        const filter = { uuid: propertyId };
+        await mongo.getDb().collection(collection).deleteOne(filter);
+    }
+
     async findById(customerId: string): Promise<Property | null> {
         const filter = { uuid: customerId };
         const doc = await mongo.getDb().collection(collection).findOne(filter);
@@ -53,12 +58,26 @@ export class MongoPropertiesRepository implements IPropertiesRepository {
         return docs as unknown as Array<Property>;
     }
 
-    async updateById(propertyId: string, props: PropertyProps): Promise<void> {
-        const filter = { uuid: propertyId };
+    async update(property: Property): Promise<void> {
+        const filter = { uuid: property.id };
         await mongo
             .getDb()
             .collection(collection)
-            .findOneAndUpdate(filter, { $set: { props } });
+            .findOneAndUpdate(filter, {
+                $set: {
+                    props: property.props,
+                },
+            });
+    }
+
+    async findByOwnerId(ownerId: string): Promise<Array<Property>> {
+        const filter = { 'props.ownerId': ownerId };
+        const docs = mongo
+            .getDb()
+            .collection(collection)
+            .find(filter)
+            .toArray();
+        return docs as unknown as Array<Property>;
     }
 
     private async checkLocationIndex() {

@@ -4,22 +4,18 @@ import { Customer, Props as CustomerProps } from '../../core/entities/Customer';
 import { asc, desc } from '../sortEntities';
 
 export class InMemoryCustomersRepository implements ICustomersRepository {
-    public items: Customer[] = [];
+    public items: Array<Customer> = [];
 
     async count(): Promise<number> {
         return this.items.length;
     }
 
     async deleteById(customerId: string): Promise<void> {
-        this.items = this.items.filter(
-            (customer) => customer.id !== customerId
-        );
+        this.items = this.items.filter((item) => item.id !== customerId);
     }
 
     async findByEmail(email: string): Promise<Customer | null> {
-        const customer = this.items.find(
-            (customer) => customer.props.email === email
-        );
+        const customer = this.items.find((item) => item.props.email === email);
         if (!customer) return null;
         return customer;
     }
@@ -53,15 +49,9 @@ export class InMemoryCustomersRepository implements ICustomersRepository {
         this.items.push(customer);
     }
 
-    async updateById(
-        customerId: string,
-        props: CustomerProps
-    ): Promise<Customer> {
-        const updatedCustomer = Customer.create(props, customerId);
-        this.items = this.items.map((customer) => {
-            if (customer.id === customerId) return updatedCustomer;
-            return customer;
-        });
-        return updatedCustomer;
+    async update(customer: Customer): Promise<void> {
+        this.items = this.items.map((item) =>
+            item.id === customer.id ? customer : item
+        );
     }
 }

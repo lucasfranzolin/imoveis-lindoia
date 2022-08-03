@@ -3,13 +3,15 @@ import { Pagination } from '../../core/types';
 
 export interface IPropertiesRepository {
     count(): Promise<number>;
-    findById(customerId: string): Promise<Property | null>;
-    save(realtor: Property): Promise<void>;
+    deleteById(propertyId: string): Promise<void>;
+    findById(propertyId: string): Promise<Property | null>;
+    save(property: Property): Promise<void>;
     list({
         limit,
         order,
         page,
         sortBy,
     }: Pagination<PropertyProps>): Promise<Array<Property>>;
-    updateById(propertyId: string, props: PropertyProps): Promise<void>;
+    update(property: Property): Promise<void>;
+    findByOwnerId(ownerId: string): Promise<Array<Property>>;
 }

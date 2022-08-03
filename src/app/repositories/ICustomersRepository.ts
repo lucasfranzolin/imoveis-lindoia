@@ -8,5 +8,5 @@ export interface ICustomersRepository {
     findById(customerId: string): Promise<Customer | null>;
     list(params: Pagination<CustomerProps>): Promise<Array<Customer>>;
     save(realtor: Customer): Promise<void>;
-    updateById(customerId: string, props: CustomerProps): Promise<Customer>;
+    update(customer: Customer): Promise<void>;
 }

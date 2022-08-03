@@ -42,6 +42,12 @@ const envVarsSchema = Joi.object()
         MAIL_AUTH_PASSWORD: Joi.string()
             .default(process.env.MAIL_AUTH_PASSWORD)
             .required(),
+        JWT_ACCESS_TOKEN_SECRET: Joi.string()
+            .default(process.env.JWT_ACCESS_TOKEN_SECRET)
+            .required(),
+        JWT_REFRESH_TOKEN_SECRET: Joi.string()
+            .default(process.env.JWT_REFRESH_TOKEN_SECRET)
+            .required(),
     })
     .unknown();
 
@@ -56,6 +62,16 @@ if (error) {
 export const config = {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
+    jwt: {
+        accessToken: {
+            secret: envVars.JWT_ACCESS_TOKEN_SECRET,
+            expiresIn: 10, // 10 seconds
+        },
+        refreshToken: {
+            secret: envVars.JWT_REFRESH_TOKEN_SECRET,
+            expiresIn: 24 * 60 * 60, // 1 day
+        },
+    },
     aws: {
         s3: {
             accessKey: envVars.AWS_S3_ACCESS_KEY,

@@ -26,8 +26,8 @@ export async function save(
     next: NextFunction
 ): Promise<void> {
     try {
-        await saveCustomerUseCase.execute(req.body);
-        res.status(httpStatus.CREATED).send();
+        const result = await saveCustomerUseCase.execute(req.body);
+        res.status(httpStatus.CREATED).json(result);
     } catch (err) {
         next(err);
     }

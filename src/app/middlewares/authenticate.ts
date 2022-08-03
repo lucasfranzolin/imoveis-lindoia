@@ -1,30 +1,32 @@
 import { NextFunction, Request, Response } from 'express';
-import httpStatus from 'http-status';
+import jwt from 'jsonwebtoken';
+import { config } from '../../config/config';
+import { AccessDeniedError } from '../api-errors/AccessDeniedError';
+import { findRealtorByIdUseCase } from '../usecases/find-realtor-by-id';
 
-import { ApiError } from '../ApiError';
-
-const headerKey = 'Authorization';
-
-const unauthorize = (next: NextFunction, message: string) =>
-    next(new ApiError(httpStatus.UNAUTHORIZED, message));
+export const headerKey = 'authorization';
 
 export const authenticate = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
+    if (config.env === 'development') return next();
+
     const bearerToken = req.header(headerKey);
     if (!bearerToken) {
-        return unauthorize(
-            next,
-            `O token não foi encontrado no '${headerKey} header' da requisição.`
+        return next(
+            new AccessDeniedError(
+                `O token não foi encontrado no '${headerKey} header' da requisição.`
+            )
         );
     }
-    // const [, token] = bearerToken.split(' ');
+
     try {
-        // verify(token, config.jwt.secret);
+        const [, token] = bearerToken.split(' ');
+        jwt.verify(token, config.jwt.accessToken.secret);
         return next();
     } catch {
-        return unauthorize(next, 'Token inválido.');
+        return next(new AccessDeniedError('Token inválido.'));
     }
 };

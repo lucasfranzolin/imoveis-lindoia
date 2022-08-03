@@ -1,5 +1,7 @@
+import httpStatus from 'http-status';
 import { Customer } from '../../../core/entities/Customer';
 import { EmailAlreadyBeingUsedError } from '../../api-errors/EmailAlreadyBeingUsedError';
+import { ApiError } from '../../ApiError';
 import { ICustomersRepository } from '../../repositories/ICustomersRepository';
 
 export type RequestDTO = {
@@ -12,11 +14,16 @@ export type RequestDTO = {
 export class SaveCustomerUseCase {
     constructor(private customersRepository: ICustomersRepository) {}
 
-    async execute(data: RequestDTO): Promise<void> {
-        const customer = await this.customersRepository.findByEmail(data.email);
-        if (customer) throw new EmailAlreadyBeingUsedError(data.email);
+    async execute({ email, ...rest }: RequestDTO): Promise<Customer> {
+        const customer = await this.customersRepository.findByEmail(email);
+        if (customer) throw new EmailAlreadyBeingUsedError(email);
 
-        const newCustomer = Customer.create(data);
+        const newCustomer = Customer.create({
+            email,
+            ...rest,
+        });
+
         await this.customersRepository.save(newCustomer);
+        return newCustomer;
     }
 }

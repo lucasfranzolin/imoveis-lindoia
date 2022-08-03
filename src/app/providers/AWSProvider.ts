@@ -20,35 +20,51 @@ export class AWSProvider implements IAWSProvider {
     async listObjects(
         bucketName: string,
         folder: string
-    ): Promise<Array<string>> {
+    ): Promise<AWS.S3.ListObjectsV2Output> {
         const params: AWS.S3.ListObjectsV2Request = {
             Bucket: bucketName,
             Delimiter: '/',
             Prefix: folder + '/',
         };
-        const data = await this.s3.listObjectsV2(params).promise();
-        const Keys = data.Contents!.map((content) => content.Key);
-        const downloadUrls = await Promise.all(
-            Keys.map((key) => this.getObjectUrl(bucketName, key!))
-        );
-        return downloadUrls;
+        return await this.s3.listObjectsV2(params).promise();
     }
 
-    async uploadToS3<T>(
+    async uploadToS3(
         bucketName: string,
-        referenceId: string,
+        folder: string,
         files: Array<formidable.File>
     ): Promise<string[]> {
         return await Promise.all(
-            files.map((data) =>
-                this.execUploadToS3(bucketName, referenceId, data)
-            )
+            files.map((data) => this.execUploadToS3(bucketName, folder, data))
         );
+    }
+
+    async deleteMany(
+        bucketName: string,
+        contents: AWS.S3.ObjectList
+    ): Promise<void> {
+        const deleteParams: AWS.S3.DeleteObjectsRequest = {
+            Bucket: bucketName,
+            Delete: {
+                Objects: contents.map(({ Key }) => ({ Key: Key! })),
+            },
+        };
+        await this.s3.deleteObjects(deleteParams).promise();
+    }
+
+    async getObjectUrl(bucketName: string, filename: string): Promise<string> {
+        const params = {
+            Bucket: bucketName,
+            Key: filename,
+        };
+        const fullUrl = await this.s3.getSignedUrlPromise('putObject', params);
+        const [objectUrl] = fullUrl.split('?');
+        return objectUrl;
     }
 
     private async execUploadToS3(
         bucketName: string,
-        referenceId: string,
+        folder: string,
         data: formidable.File
     ): Promise<string> {
         const { filepath, originalFilename } = data;
@@ -59,7 +75,7 @@ export class AWSProvider implements IAWSProvider {
             originalFilename!.lastIndexOf('.') + 1
         );
 
-        const Key = `${referenceId}/${imageName}.${extension}`;
+        const Key = `${folder}/${imageName}.${extension}`;
 
         const params: AWS.S3.PutObjectRequest = {
             ACL: 'public-read',
@@ -71,9 +87,9 @@ export class AWSProvider implements IAWSProvider {
         const downloadUrl: string = await new Promise((resolve, reject) => {
             this.s3
                 .putObject(params)
-                .on('httpUploadProgress', ({ loaded, total }) => {
-                    const pct = Math.round((loaded * 100) / total);
-                })
+                // .on('httpUploadProgress', ({ loaded, total }) => {
+                //     const pct = Math.round((loaded * 100) / total);
+                // })
                 .send((err, data) => {
                     if (err) reject(err);
                     this.getObjectUrl(bucketName, Key)
@@ -82,30 +98,5 @@ export class AWSProvider implements IAWSProvider {
                 });
         });
         return downloadUrl;
-    }
-
-    private async getObjectUrl(
-        bucketName: string,
-        filename: string
-    ): Promise<string> {
-        const params = {
-            Bucket: bucketName,
-            Key: filename,
-        };
-        const fullUrl = await this.s3.getSignedUrlPromise('putObject', params);
-        const [objectUrl] = fullUrl.split('?');
-        return objectUrl;
-    }
-
-    private async getObjectMetadata<T>(
-        bucketName: string,
-        Key: string
-    ): Promise<T> {
-        const params: AWS.S3.HeadObjectRequest = {
-            Bucket: bucketName,
-            Key,
-        };
-        const attr = await this.s3.headObject(params).promise();
-        return attr.Metadata as T;
     }
 }

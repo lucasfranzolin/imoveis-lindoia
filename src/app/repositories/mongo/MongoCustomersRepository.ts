@@ -61,15 +61,15 @@ export class MongoCustomersRepository implements ICustomersRepository {
             .insertOne({ ...customer });
     }
 
-    async updateById(
-        customerId: string,
-        props: CustomerProps
-    ): Promise<Customer> {
-        const filter = { uuid: customerId };
-        const doc = await mongo
+    async update(customer: Customer): Promise<void> {
+        const filter = { uuid: customer.id };
+        await mongo
             .getDb()
             .collection(collection)
-            .findOneAndUpdate(filter, { $set: { props } });
-        return Customer.create(doc.value!.props, doc.value!.uuid);
+            .findOneAndUpdate(filter, {
+                $set: {
+                    props: customer.props,
+                },
+            });
     }
 }

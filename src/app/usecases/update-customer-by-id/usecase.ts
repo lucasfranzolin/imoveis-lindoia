@@ -14,7 +14,9 @@ export class UpdateCustomerByIdUseCase {
         let customer = await this.customersRepository.findById(id);
         if (!customer) throw new CustomerNotFoundError();
 
-        customer = await this.customersRepository.updateById(id, rest);
-        return customer;
+        const updatedCustomer = Customer.create(rest, id);
+
+        await this.customersRepository.update(updatedCustomer);
+        return updatedCustomer;
     }
 }

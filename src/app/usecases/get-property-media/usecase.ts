@@ -17,10 +17,22 @@ export class GetPropertyMediaUseCase {
         const property = await this.propertiesRepository.findById(data.id);
         if (!property) throw new PropertyOwnerNotFoundError();
 
-        const result = await this.awsProvider.listObjects(
+        const { Contents } = await this.awsProvider.listObjects(
             config.aws.s3.bucketName,
             data.id
         );
-        return result;
+
+        let downloadUrls: Array<string> = [];
+        if (Contents) {
+            downloadUrls = await Promise.all(
+                Contents.map((content) =>
+                    this.awsProvider.getObjectUrl(
+                        config.aws.s3.bucketName,
+                        content.Key!
+                    )
+                )
+            );
+        }
+        return downloadUrls;
     }
 }

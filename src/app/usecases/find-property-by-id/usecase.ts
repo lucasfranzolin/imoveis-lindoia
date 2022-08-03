@@ -9,8 +9,8 @@ type RequestDTO = {
 export class FindPropertyByIdUseCase {
     constructor(private propertiesRepository: IPropertiesRepository) {}
 
-    async execute(data: RequestDTO): Promise<Property> {
-        const property = await this.propertiesRepository.findById(data.id);
+    async execute({ id }: RequestDTO): Promise<Property> {
+        const property = await this.propertiesRepository.findById(id);
         if (!property) throw new PropertyOwnerNotFoundError();
 
         return property;

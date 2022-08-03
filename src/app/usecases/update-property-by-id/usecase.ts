@@ -20,30 +20,26 @@ export class UpdateProperyByIdUseCase {
 
     async execute({ id, ...data }: RequestDTO): Promise<Property> {
         const { ownerId, coordinates, ...rest } = data;
-        let property = await this.propertiesRepository.findById(id);
+
+        const property = await this.propertiesRepository.findById(id);
         if (!property) throw new PropertyNotFoundError();
 
         const owner = await this.customersRepository.findById(ownerId);
         if (!owner) throw new PropertyOwnerNotFoundError();
 
-        let updatedProperty: Property;
-        try {
-            updatedProperty = Property.create(
-                {
-                    ...rest,
-                    ownerId,
-                    location: {
-                        type: GeoType.POINT,
-                        coordinates,
-                    },
+        const updatedProperty = Property.create(
+            {
+                ...rest,
+                ownerId,
+                location: {
+                    type: GeoType.POINT,
+                    coordinates,
                 },
-                id
-            );
-        } catch (err) {
-            throw new ApiError(httpStatus.BAD_REQUEST, err as string);
-        }
+            },
+            id
+        );
 
-        await this.propertiesRepository.updateById(id, updatedProperty.props);
+        await this.propertiesRepository.update(updatedProperty);
         return updatedProperty;
     }
 }

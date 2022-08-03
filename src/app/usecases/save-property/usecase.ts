@@ -36,19 +36,14 @@ export class SavePropertyUseCase {
         const owner = await this.customersRepository.findById(ownerId);
         if (!owner) throw new PropertyOwnerNotFoundError();
 
-        let newProperty: Property;
-        try {
-            newProperty = Property.create({
-                ...rest,
-                ownerId,
-                location: {
-                    type: GeoType.POINT,
-                    coordinates,
-                },
-            });
-        } catch (err) {
-            throw new ApiError(httpStatus.BAD_REQUEST, err as string);
-        }
+        const newProperty = Property.create({
+            ...rest,
+            ownerId,
+            location: {
+                type: GeoType.POINT,
+                coordinates,
+            },
+        });
 
         await this.propertiesRepository.save(newProperty);
         return newProperty;

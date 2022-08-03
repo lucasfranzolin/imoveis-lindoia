@@ -4,9 +4,6 @@
         "esbenp.prettier-vscode",
         "firsttris.vscode-jest-runner",
         "wix.vscode-import-cost",
-        "editorconfig.editorconfig",
-        "mikestead.dotenv",
-        "ms-vscode.vscode-typescript-next",
-        "meganrogge.template-string-converter"
+        "editorconfig.editorconfig"
     ]
 }

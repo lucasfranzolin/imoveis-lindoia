@@ -14,6 +14,7 @@ import { listPropertiesUseCase } from '../usecases/list-properties';
 import { getPropertyMediaUseCase } from '../usecases/get-property-media';
 import { findPropertyByIdUseCase } from '../usecases/find-property-by-id';
 import { updatePropertyByIdUseCase } from '../usecases/update-property-by-id';
+import { deletePropertyByIdUseCase } from '../usecases/delete-property-by-id';
 
 export async function save(
     req: Request,
@@ -159,6 +160,20 @@ export async function update(
             ...req.body,
         });
         res.status(httpStatus.OK).json(result);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function _delete(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const { id } = req.params;
+    try {
+        await deletePropertyByIdUseCase.execute({ id });
+        res.status(httpStatus.OK).send();
     } catch (err) {
         next(err);
     }
