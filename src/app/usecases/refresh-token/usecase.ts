@@ -1,18 +1,33 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../../../config/config';
+import { AccessDeniedError } from '../../api-errors/AccessDeniedError';
+import { SessionExpiredError } from '../../api-errors/SessionExpiredError';
+import { SessionNotFoundError } from '../../api-errors/SessionNotFoundError';
+import { ISessionsRepository } from '../../repositories/ISessionsRepository';
 
 type RequestDTO = {
     refreshToken: string;
 };
 
 export class RefreshTokenUseCase {
-    constructor() {}
+    constructor(private sessionsRepository: ISessionsRepository) {}
 
     async execute({ refreshToken }: RequestDTO): Promise<{
         accessToken: string;
-        refreshed: boolean;
     }> {
-        jwt.verify(refreshToken, config.jwt.refreshToken.secret);
+        const session = await this.sessionsRepository.get(refreshToken);
+        if (!session) throw new SessionNotFoundError();
+
+        try {
+            jwt.verify(
+                session.props.refreshToken,
+                config.jwt.refreshToken.secret
+            );
+        } catch (err) {
+            await this.sessionsRepository.delete(session);
+            throw new SessionExpiredError();
+        }
+
         const accessToken = jwt.sign(
             {}, //
             config.jwt.accessToken.secret,
@@ -22,7 +37,6 @@ export class RefreshTokenUseCase {
         );
         return {
             accessToken,
-            refreshed: true,
         };
     }
 }

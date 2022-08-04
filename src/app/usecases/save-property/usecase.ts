@@ -1,4 +1,3 @@
-import httpStatus from 'http-status';
 import { Property } from '../../../core/entities/Property';
 import {
     GeoType,
@@ -6,7 +5,6 @@ import {
     PropertyTypeEnum,
 } from '../../../core/enums';
 import { Address, PointCoordinates, Price } from '../../../core/types';
-import { ApiError } from '../../ApiError';
 import { ICustomersRepository } from '../../repositories/ICustomersRepository';
 import { IPropertiesRepository } from '../../repositories/IPropertiesRepository';
 import { PropertyOwnerNotFoundError } from '../../api-errors/PropertyOwnerNotFoundError';

@@ -6,33 +6,36 @@ import {
 import { Pagination } from '../../../core/types';
 import { IPropertiesRepository } from '../IPropertiesRepository';
 
-const collection = 'properties';
-
 export class MongoPropertiesRepository implements IPropertiesRepository {
+    private readonly collection = 'properties';
+
     private locationIndex: string = 'locationIndex';
     private locationIndexExists: boolean = false;
 
     async count(): Promise<number> {
-        return await mongo.getDb().collection(collection).countDocuments();
+        return await mongo.getDb().collection(this.collection).countDocuments();
     }
 
     async deleteById(propertyId: string): Promise<void> {
         const filter = { uuid: propertyId };
-        await mongo.getDb().collection(collection).deleteOne(filter);
+        await mongo.getDb().collection(this.collection).deleteOne(filter);
     }
 
     async findById(customerId: string): Promise<Property | null> {
         const filter = { uuid: customerId };
-        const doc = await mongo.getDb().collection(collection).findOne(filter);
+        const doc = await mongo
+            .getDb()
+            .collection(this.collection)
+            .findOne(filter);
         if (!doc) return null;
-        return doc as unknown as Property;
+        return new Property(doc.props, doc.uuid);
     }
 
     async save(property: Property): Promise<void> {
         await this.checkLocationIndex();
         await mongo
             .getDb()
-            .collection(collection)
+            .collection(this.collection)
             .insertOne({ ...property });
     }
 
@@ -52,17 +55,17 @@ export class MongoPropertiesRepository implements IPropertiesRepository {
         }
         const docs = await mongo
             .getDb()
-            .collection(collection)
+            .collection(this.collection)
             .aggregate(agg)
             .toArray();
-        return docs as unknown as Array<Property>;
+        return docs.map((doc) => new Property(doc.props, doc.uuid));
     }
 
     async update(property: Property): Promise<void> {
         const filter = { uuid: property.id };
         await mongo
             .getDb()
-            .collection(collection)
+            .collection(this.collection)
             .findOneAndUpdate(filter, {
                 $set: {
                     props: property.props,
@@ -72,24 +75,28 @@ export class MongoPropertiesRepository implements IPropertiesRepository {
 
     async findByOwnerId(ownerId: string): Promise<Array<Property>> {
         const filter = { 'props.ownerId': ownerId };
-        const docs = mongo
+        const docs = await mongo
             .getDb()
-            .collection(collection)
+            .collection(this.collection)
             .find(filter)
             .toArray();
-        return docs as unknown as Array<Property>;
+        return docs.map((doc) => new Property(doc.props, doc.uuid));
     }
 
     private async checkLocationIndex() {
-        if (this.locationIndexExists) return;
+        const collections = await mongo.getDb().collections();
+        const collectionExists = collections
+            .map((item) => item.collectionName)
+            .includes(this.collection);
+        if (this.locationIndexExists || !collectionExists) return;
 
         this.locationIndexExists = await mongo
             .getDb()
-            .collection(collection)
+            .collection(this.collection)
             .indexExists(this.locationIndex);
 
         if (!this.locationIndexExists) {
-            await mongo.getDb().collection(collection).createIndex(
+            await mongo.getDb().collection(this.collection).createIndex(
                 {
                     location: 1,
                 },

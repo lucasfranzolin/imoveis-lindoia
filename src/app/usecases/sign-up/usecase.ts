@@ -8,20 +8,17 @@ type RequestDTO = {
     password: string;
 };
 
-export class SignUpRealtorUseCase {
+export class SignUpUseCase {
     constructor(private realtorsRepository: IRealtorsRepository) {}
 
     async execute({ email, password }: RequestDTO): Promise<void> {
         const realtor = await this.realtorsRepository.findByEmail(email);
         if (realtor) throw new EmailAlreadyBeingUsedError(email);
-
         const passwordHash = await bcrypt.hash(password, 10);
-
         const newRealtor = Realtor.create({
             email,
             password: passwordHash,
         });
-
         await this.realtorsRepository.save(newRealtor);
     }
 }

@@ -10,7 +10,7 @@ export type Props = DealMediation & {
 };
 
 export class Contract extends Entity<Props> {
-    private constructor(props: Props, id?: string) {
+    constructor(props: Props, id?: string) {
         super(props, id);
     }
 

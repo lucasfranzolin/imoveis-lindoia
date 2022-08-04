@@ -4,6 +4,7 @@ import { config } from '../../../config/config';
 import { IAWSProvider } from '../../providers/interfaces/IAWSProvider';
 import { IPropertiesRepository } from '../../repositories/IPropertiesRepository';
 import { PropertyNotFoundError } from '../../api-errors/PropertyNotFoundError';
+import { combineLatest, map, Observable } from 'rxjs';
 
 type RequestDTO = {
     id: string;
@@ -16,14 +17,23 @@ export class StorePropertyMediaUseCase {
         private awsProvider: IAWSProvider
     ) {}
 
-    async execute(data: RequestDTO): Promise<Array<string>> {
+    async execute(data: RequestDTO): Promise<Observable<number>> {
         const property = await this.propertiesRepository.findById(data.id);
         if (!property) throw new PropertyNotFoundError();
 
-        return await this.awsProvider.uploadToS3(
+        const emitters$ = this.awsProvider.uploadToS3(
             config.aws.s3.bucketName,
             data.id,
             data.files
+        );
+        return combineLatest(emitters$).pipe(
+            map(
+                (array) =>
+                    array.reduce(
+                        (prev, cur) => Number(cur.percentage) + prev,
+                        0
+                    ) / array.length
+            )
         );
     }
 }

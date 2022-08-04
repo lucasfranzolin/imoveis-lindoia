@@ -97,11 +97,22 @@ export async function storeMedia(
                 }
             )
         );
-        const result = await storePropertyMediaUseCase.execute({
+        const combined$ = await storePropertyMediaUseCase.execute({
             id,
             files,
         });
-        res.status(httpStatus.CREATED).json(result);
+
+        combined$.subscribe({
+            next(value) {
+                res.write(value);
+            },
+            error(err) {
+                next(err);
+            },
+            complete() {
+                res.status(httpStatus.CREATED).send();
+            },
+        });
     } catch (err) {
         next(err);
     }

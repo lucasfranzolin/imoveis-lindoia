@@ -1,6 +1,15 @@
-import { config } from 'dotenv';
+import dotenv from 'dotenv';
 import path from 'path';
 
-const filePath = path.join(__dirname, `../../.env.${process.env.NODE_ENV}`);
+let processEnv: dotenv.DotenvConfigOutput;
 
-config({ path: filePath });
+const init = (path: string) => {
+    console.log(`Loaded env from ${path}`);
+    processEnv = dotenv.config({ path });
+};
+
+export const setupEnv = () =>
+    processEnv ??
+    init(path.join(process.cwd(), `.env.${process.env.NODE_ENV}`));
+
+setupEnv();

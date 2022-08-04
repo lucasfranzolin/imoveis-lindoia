@@ -1,41 +1,44 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
-import { signInRealtorUseCase } from '../usecases/signin-realtor';
+import { signInUseCase } from '../usecases/sign-in';
 import { refreshTokenUseCase } from '../usecases/refresh-token';
-import { signUpRealtorUseCase } from '../usecases/signup-realtor';
-import { config } from '../../config/config';
-import { AccessDeniedError } from '../api-errors/AccessDeniedError';
+import { signUpUseCase } from '../usecases/sign-up';
+import { signOutUseCase } from '../usecases/sign-out';
 
-export async function signup(
+export async function signUp(
     req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> {
     try {
-        const result = await signUpRealtorUseCase.execute(req.body);
+        await signUpUseCase.execute(req.body);
+        res.status(httpStatus.OK).send();
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function signIn(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    try {
+        const result = await signInUseCase.execute(req.body);
         res.status(httpStatus.OK).json(result);
     } catch (err) {
         next(err);
     }
 }
 
-export async function signin(
+export async function signOut(
     req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> {
     try {
-        const { refreshToken, ...rest } = await signInRealtorUseCase.execute(
-            req.body
-        );
-
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: true,
-            maxAge: config.jwt.refreshToken.expiresIn * 1000,
-        });
-
-        res.status(httpStatus.OK).json(rest);
+        await signOutUseCase.execute(req.body);
+        res.status(httpStatus.NO_CONTENT).send();
     } catch (err) {
         next(err);
     }
@@ -47,15 +50,7 @@ export async function refresh(
     next: NextFunction
 ): Promise<void> {
     try {
-        const { refreshToken } = req.cookies;
-        if (!refreshToken)
-            throw new AccessDeniedError(
-                `O 'refreshToken' não foi encontrado nos cookies da requisição.`
-            );
-
-        const result = await refreshTokenUseCase.execute({
-            refreshToken,
-        });
+        const result = await refreshTokenUseCase.execute(req.body);
         res.status(httpStatus.OK).json(result);
     } catch (err) {
         next(err);

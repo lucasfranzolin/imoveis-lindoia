@@ -8,7 +8,7 @@ export type Props = {
 };
 
 export class Customer extends Entity<Props> {
-    private constructor(props: Props, id?: string) {
+    constructor(props: Props, id?: string) {
         super(props, id);
     }
 

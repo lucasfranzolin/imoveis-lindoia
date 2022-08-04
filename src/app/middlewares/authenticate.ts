@@ -27,6 +27,6 @@ export const authenticate = async (
         jwt.verify(token, config.jwt.accessToken.secret);
         return next();
     } catch {
-        return next(new AccessDeniedError('Token inválido.'));
+        return next(new AccessDeniedError('Bearer token inválido.'));
     }
 };

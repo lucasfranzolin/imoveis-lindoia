@@ -1,6 +1,12 @@
 import { Entity } from '../domain/Entity';
-import { Price, Address, GeoJson, PointCoordinates } from '../types';
-import { GeoType, PropertyPurposeEnum, PropertyTypeEnum } from '../enums';
+import {
+    Price,
+    Address,
+    GeoJson,
+    PointCoordinates,
+    MediaPreview,
+} from '../types';
+import { PropertyPurposeEnum, PropertyTypeEnum } from '../enums';
 
 export type Props = {
     address: Address;
@@ -14,7 +20,7 @@ export type Props = {
 };
 
 export class Property extends Entity<Props> {
-    private constructor(props: Props, id?: string) {
+    constructor(props: Props, id?: string) {
         super(props, id);
     }
 

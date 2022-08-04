@@ -1,15 +1,12 @@
 import { Router } from 'express';
 
 import * as controller from '../controllers/auth';
-import { authenticate } from '../middlewares/authenticate';
 
 const authRouter = Router();
 
-authRouter.post('/signup', controller.signup);
-authRouter.post('/signin', controller.signin);
+authRouter.post('/sign-up', controller.signUp);
+authRouter.post('/sign-in', controller.signIn);
+authRouter.post('/sign-out', controller.signOut);
 authRouter.post('/refresh', controller.refresh);
-authRouter.get('/test', authenticate, (req, res) => {
-    res.send('Funcionou!!!');
-});
 
 export { authRouter };

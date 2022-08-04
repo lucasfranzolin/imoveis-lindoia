@@ -1,13 +1,20 @@
-import './env';
-
 import Joi from 'joi';
+import { setupEnv } from './env';
 
 const envVarsSchema = Joi.object()
     .keys({
         NODE_ENV: Joi.string()
             .valid('production', 'development', 'test')
-            .required(),
-        PORT: Joi.number().default(Number(process.env.PORT)).required(),
+            .default(process.env.NODE_ENV),
+        PORT: Joi.number().when('NODE_ENV', {
+            is: 'production',
+            then: Joi.number().default(80),
+            otherwise: Joi.number().when('NODE_ENV', {
+                is: 'development',
+                then: Joi.number().default(4001),
+                otherwise: Joi.number().default(4002),
+            }),
+        }),
         AWS_S3_ACCESS_KEY: Joi.string()
             .default(process.env.AWS_S3_ACCESS_KEY)
             .required(),
@@ -53,7 +60,7 @@ const envVarsSchema = Joi.object()
 
 const { value: envVars, error } = envVarsSchema
     .prefs({ errors: { label: 'key' } })
-    .validate(process.env);
+    .validate(setupEnv().parsed);
 
 if (error) {
     throw new Error(`Config validation error: ${error.message}`);
@@ -65,11 +72,11 @@ export const config = {
     jwt: {
         accessToken: {
             secret: envVars.JWT_ACCESS_TOKEN_SECRET,
-            expiresIn: 10, // 10 seconds
+            expiresIn: 15 * 60, // 15 minutes
         },
         refreshToken: {
             secret: envVars.JWT_REFRESH_TOKEN_SECRET,
-            expiresIn: 24 * 60 * 60, // 1 day
+            expiresIn: 7 * 24 * 60 * 60, // 7 days
         },
     },
     aws: {

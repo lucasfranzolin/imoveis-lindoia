@@ -4,7 +4,8 @@ import formidable from 'formidable';
 import fs from 'fs';
 
 import { config } from '../../config/config';
-import { IAWSProvider } from './interfaces/IAWSProvider';
+import { IAWSProvider, UploadProgress } from './interfaces/IAWSProvider';
+import { Observable } from 'rxjs';
 
 export class AWSProvider implements IAWSProvider {
     private s3: AWS.S3;
@@ -29,13 +30,13 @@ export class AWSProvider implements IAWSProvider {
         return await this.s3.listObjectsV2(params).promise();
     }
 
-    async uploadToS3(
+    uploadToS3(
         bucketName: string,
         folder: string,
         files: Array<formidable.File>
-    ): Promise<string[]> {
-        return await Promise.all(
-            files.map((data) => this.execUploadToS3(bucketName, folder, data))
+    ): Array<Observable<UploadProgress>> {
+        return files.map((data) =>
+            this.getUploadObservable(bucketName, folder, data)
         );
     }
 
@@ -62,41 +63,48 @@ export class AWSProvider implements IAWSProvider {
         return objectUrl;
     }
 
-    private async execUploadToS3(
+    generateObjectKey(folder: string, data: formidable.File): string {
+        const fileName = this.generateFilename(data.originalFilename!);
+        return `${folder}/${fileName}`;
+    }
+
+    private getUploadObservable(
         bucketName: string,
         folder: string,
         data: formidable.File
-    ): Promise<string> {
-        const { filepath, originalFilename } = data;
+    ): Observable<UploadProgress> {
+        const Key = this.generateObjectKey(folder, data);
 
+        const params: AWS.S3.PutObjectRequest = {
+            ACL: 'public-read',
+            Body: fs.readFileSync(data.filepath),
+            Bucket: bucketName,
+            Key,
+        };
+
+        const emitter = new Observable<UploadProgress>((subscriber) => {
+            this.s3
+                .putObject(params)
+                .on('httpUploadProgress', ({ loaded, total }) => {
+                    subscriber.next({
+                        percentage: Math.round((loaded * 100) / total),
+                        objectKey: Key,
+                    });
+                })
+                .send((err, data) => {
+                    if (err) subscriber.error(err);
+                    subscriber.complete();
+                });
+        });
+        return emitter;
+    }
+
+    private generateFilename(originalFilename: string): string {
         const rawBytes = crypto.randomBytes(16);
         const imageName = rawBytes.toString('hex');
         const extension = originalFilename!.slice(
             originalFilename!.lastIndexOf('.') + 1
         );
-
-        const Key = `${folder}/${imageName}.${extension}`;
-
-        const params: AWS.S3.PutObjectRequest = {
-            ACL: 'public-read',
-            Body: fs.readFileSync(filepath),
-            Bucket: bucketName,
-            Key,
-        };
-
-        const downloadUrl: string = await new Promise((resolve, reject) => {
-            this.s3
-                .putObject(params)
-                // .on('httpUploadProgress', ({ loaded, total }) => {
-                //     const pct = Math.round((loaded * 100) / total);
-                // })
-                .send((err, data) => {
-                    if (err) reject(err);
-                    this.getObjectUrl(bucketName, Key)
-                        .then(resolve)
-                        .catch(reject);
-                });
-        });
-        return downloadUrl;
+        return `${imageName}.${extension}`;
     }
 }

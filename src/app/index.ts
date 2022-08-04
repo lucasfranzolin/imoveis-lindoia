@@ -1,48 +1,33 @@
-import { Server } from 'http';
+import cors from 'cors';
+import express, { Application, json, urlencoded } from 'express';
+import helmet from 'helmet';
+import httpStatus from 'http-status';
 
 import { config } from '../config/config';
-import { logger } from '../config/logger';
-import { mongo } from '../config/mongo';
-import { app } from './app';
+import { morgan } from '../config/morgan';
+import { ApiError } from './ApiError';
+import { errorConverter } from './middlewares/error-converter';
+import { errorHandler } from './middlewares/error-handler';
+import { router } from './router';
 
-let server: Server;
+const app: Application = express();
 
-mongo.connect().then(() => {
-    logger.info('Connected to MongoDB');
-    server = app.listen(config.port, () => {
-        logger.info(`Server is listening on port ${config.port}`);
-    });
+if (config.env !== 'test') {
+    app.use(morgan.successHandler);
+    app.use(morgan.errorHandler);
+}
+
+app.use(helmet());
+app.use(json());
+app.use(urlencoded({ extended: true }));
+app.use(cors());
+
+app.use(router);
+app.use((req, res, next) => {
+    next(new ApiError(httpStatus.NOT_FOUND, 'Route not found.'));
 });
 
-const exitHandler = () => {
-    if (server) {
-        mongo.disconnect();
-        server.close(() => {
-            logger.info('Server closed');
-            process.exit(1);
-        });
-    } else {
-        process.exit(1);
-    }
-};
+app.use(errorConverter);
+app.use(errorHandler);
 
-const uncaughtException = (error: any) => {
-    logger.error('Uncaught exception: ' + error);
-    exitHandler();
-};
-
-const unhandledRejection = (error: any) => {
-    logger.error('Unhandled rejection: ' + error);
-    exitHandler();
-};
-
-process.on('uncaughtException', uncaughtException);
-process.on('unhandledRejection', unhandledRejection);
-
-process.on('SIGTERM', () => {
-    logger.info('SIGTERM received');
-    if (server) {
-        mongo.disconnect();
-        server.close();
-    }
-});
+export { app };
