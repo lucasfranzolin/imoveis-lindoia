@@ -9,10 +9,10 @@
         }
     },
     "lint-staged": {
-        "*.ts": [
-            "eslint --fix",
-            "prettier --write .",
-            "jest"
+        "src/**/*.+(json|ts)": [
+            "node_modules/.bin/eslint --fix",
+            "node_modules/.bin/prettier --write .",
+            "node_modules/.bin/jest"
         ]
     },
     "scripts": {
@@ -23,7 +23,8 @@
         "lint": "eslint --ext .ts .",
         "test": "jest",
         "dev": "NODE_ENV=development node_modules/.bin/ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts",
-        "start": "npm run build && node dist/index.js"
+        "start": "npm run build && node dist/index.js",
+        "prepare": "husky install"
     },
     "keywords": [],
     "author": "",
@@ -52,7 +53,7 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-promise": "^6.0.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
-        "husky": "^8.0.1",
+        "husky": "^8.0.0",
         "jest": "^28.1.2",
         "lint-staged": "^13.0.3",
         "node-mocks-http": "^1.11.0",
