@@ -3,7 +3,20 @@
     "version": "1.0.0",
     "description": "",
     "type": "commonjs",
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.ts": [
+            "eslint --fix",
+            "prettier --write .",
+            "jest"
+        ]
+    },
     "scripts": {
+        "lint-staged": "lint-staged",
         "compile": "node_modules/.bin/swc src -d dist",
         "clean": "rm -rf dist",
         "build": "npm run clean && npm run compile",
@@ -39,7 +52,9 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-promise": "^6.0.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
+        "husky": "^8.0.1",
         "jest": "^28.1.2",
+        "lint-staged": "^13.0.3",
         "node-mocks-http": "^1.11.0",
         "prettier": "2.7.1",
         "regenerator-runtime": "^0.13.9",
