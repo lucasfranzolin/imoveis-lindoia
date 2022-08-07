@@ -7,6 +7,12 @@ import { authenticate } from '../middlewares/authenticate';
 
 const router = Router();
 
+router.get('/hello', (req, res) => {
+    res.status(200).json({
+        msg: 'Hello world!!',
+    });
+});
+
 router.use('/auth', authRouter);
 router.use('/customers', authenticate, customersRouter);
 router.use('/properties', authenticate, propertiesRouter);

@@ -1,15 +1,16 @@
-import dotenv from 'dotenv';
-import path from 'path';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
-let processEnv: dotenv.DotenvConfigOutput;
-
-const init = (path: string) => {
+function loadEnv(path: string) {
     console.log(`Loaded env from ${path}`);
-    processEnv = dotenv.config({ path });
-};
+    dotenv.config({ path });
+}
 
-export const setupEnv = () =>
-    processEnv ??
-    init(path.join(process.cwd(), `.env.${process.env.NODE_ENV}`));
+export function setupEnv() {
+    const isLambda = !!process.env.LAMBDA_TASK_ROOT;
+    return isLambda
+        ? console.log('Running with serverless environment!!')
+        : loadEnv(path.join(process.cwd(), `.env.${process.env.NODE_ENV}`));
+}
 
 setupEnv();

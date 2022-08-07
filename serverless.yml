@@ -1,0 +1,23 @@
+org: lucasfranzolin
+app: imoveis-lindoia
+service: imoveis-lindoia-api
+frameworkVersion: '3'
+
+custom:
+    functionsBasePath: src/handlers
+
+plugins:
+    - serverless-plugin-typescript
+    - serverless-functions-base-path
+
+provider:
+    name: aws
+    runtime: nodejs14.x
+    environment: ${file(./serverless.env.js)}
+
+functions:
+    api:
+        handler: api.handler
+        events:
+            - http: ANY /
+            - http: ANY /{proxy+}

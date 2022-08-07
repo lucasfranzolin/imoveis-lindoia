@@ -5,7 +5,7 @@ import _morgan, { token } from 'morgan';
 import { config } from './config';
 import { logger } from './logger';
 
-token('message', (req, res) => res.locals.message || '');
+token('message', (req, res) => res.statusMessage || '');
 token('date', (req, res, tz) =>
     format(zonedTimeToUtc(new Date(), tz as string), 'yyyy-MM-dd HH:mm:ss')
 );

@@ -43,7 +43,9 @@ export class SignInUseCase {
         await this.sessionsRepository.save(newSession);
 
         const accessToken = jwt.sign(
-            {}, //
+            {
+                email: realtor.props.email,
+            },
             config.jwt.accessToken.secret,
             {
                 expiresIn: config.jwt.accessToken.expiresIn,

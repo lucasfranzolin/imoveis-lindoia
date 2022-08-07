@@ -17,6 +17,6 @@ export const errorHandler = (
     if (config.env !== 'production') {
         response.stack = apiErr.stack;
     }
-    res.locals.message = message;
+    res.statusMessage = message;
     res.status(response.code).json(response);
 };

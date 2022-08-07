@@ -1,5 +1,4 @@
-import Joi from 'joi';
-import { setupEnv } from './env';
+import * as Joi from 'joi';
 
 const envVarsSchema = Joi.object()
     .keys({
@@ -60,7 +59,7 @@ const envVarsSchema = Joi.object()
 
 const { value: envVars, error } = envVarsSchema
     .prefs({ errors: { label: 'key' } })
-    .validate(setupEnv().parsed);
+    .validate(process.env);
 
 if (error) {
     throw new Error(`Config validation error: ${error.message}`);

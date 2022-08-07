@@ -29,7 +29,9 @@ export class RefreshTokenUseCase {
         }
 
         const accessToken = jwt.sign(
-            {}, //
+            {
+                email: session.props.email,
+            }, //
             config.jwt.accessToken.secret,
             {
                 expiresIn: config.jwt.accessToken.expiresIn,

@@ -16,23 +16,18 @@
         ]
     },
     "scripts": {
+        "deploy:dev": "sls --stage imoveis-lindoia-dev",
+        "dev": "NODE_ENV=development node_modules/.bin/ts-node-dev src/index.ts",
         "lint-staged": "lint-staged",
-        "compile": "node_modules/.bin/swc src -d dist",
-        "clean": "rm -rf dist",
-        "build": "npm run clean && npm run compile",
         "lint": "eslint --ext .ts .",
-        "test": "jest",
-        "dev": "NODE_ENV=development node_modules/.bin/ts-node-dev --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts",
-        "start": "npm run build && node dist/index.js",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "test": "jest"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@swc/cli": "^0.1.57",
         "@swc/core": "^1.2.208",
-        "@swc/helpers": "^0.4.3",
         "@swc/jest": "^0.2.21",
         "@types/bcrypt": "^5.0.0",
         "@types/bcryptjs": "^2.4.2",
@@ -42,7 +37,7 @@
         "@types/jest": "^28.1.4",
         "@types/jsonwebtoken": "^8.5.8",
         "@types/morgan": "^1.9.3",
-        "@types/node": "^18.0.0",
+        "@types/node": "^18.6.4",
         "@types/nodemailer": "^6.4.4",
         "@typescript-eslint/eslint-plugin": "^5.30.3",
         "@typescript-eslint/parser": "^5.30.3",
@@ -59,6 +54,8 @@
         "node-mocks-http": "^1.11.0",
         "prettier": "2.7.1",
         "regenerator-runtime": "^0.13.9",
+        "serverless-functions-base-path": "^1.0.32",
+        "serverless-plugin-typescript": "^2.1.2",
         "ts-node-dev": "^2.0.0",
         "typescript": "^4.7.4"
     },
@@ -81,6 +78,7 @@
         "morgan": "^1.10.0",
         "nodemailer": "^6.7.7",
         "rxjs": "^7.5.6",
+        "serverless-http": "^3.0.1",
         "winston": "^3.8.1"
     }
 }
