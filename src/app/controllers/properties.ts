@@ -75,7 +75,7 @@ export async function storeMedia(
         };
 
         const debug = false;
-        if (config.env === 'development' && debug) {
+        if (config.env === 'dev' && debug) {
             const uploadDir = path.join(__dirname, '/tmp');
             if (!fs.existsSync(uploadDir)) {
                 fs.mkdirSync(uploadDir);

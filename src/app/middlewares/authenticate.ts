@@ -10,7 +10,7 @@ export const authenticate = async (
     res: Response,
     next: NextFunction
 ) => {
-    if (config.env === 'development') return next();
+    if (config.env === 'dev') return next();
 
     const bearerToken = req.header(authHeaderKey);
     if (!bearerToken) {

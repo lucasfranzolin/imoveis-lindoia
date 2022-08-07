@@ -11,7 +11,7 @@ token('date', (req, res, tz) =>
 );
 
 const getIpFormat = () =>
-    config.env === 'production'
+    config.env === 'prod'
         ? '[:date[America/Sao_Paulo]] addr=:remote-addr '
         : '';
 

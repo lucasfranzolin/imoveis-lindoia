@@ -2,7 +2,6 @@
     "name": "imoveis-lindoia",
     "version": "1.0.0",
     "description": "",
-    "type": "commonjs",
     "husky": {
         "hooks": {
             "pre-commit": "lint-staged"
@@ -10,14 +9,15 @@
     },
     "lint-staged": {
         "src/**/*.+(json|ts)": [
-            "node_modules/.bin/eslint --fix",
-            "node_modules/.bin/prettier --write .",
-            "node_modules/.bin/jest"
+            "eslint --fix",
+            "prettier --write .",
+            "jest"
         ]
     },
     "scripts": {
-        "deploy:dev": "sls --stage imoveis-lindoia-dev",
-        "dev": "NODE_ENV=development node_modules/.bin/ts-node-dev src/index.ts",
+        "deploy:dev": "sls --stage dev",
+        "deploy:prod": "sls --stage prod",
+        "dev": "NODE_ENV=dev ts-node-dev src/index.ts",
         "lint-staged": "lint-staged",
         "lint": "eslint --ext .ts .",
         "prepare": "husky install",

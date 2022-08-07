@@ -3,13 +3,13 @@ import * as Joi from 'joi';
 const envVarsSchema = Joi.object()
     .keys({
         NODE_ENV: Joi.string()
-            .valid('production', 'development', 'test')
+            .valid('prod', 'dev', 'test')
             .default(process.env.NODE_ENV),
         PORT: Joi.number().when('NODE_ENV', {
-            is: 'production',
+            is: 'prod',
             then: Joi.number().default(80),
             otherwise: Joi.number().when('NODE_ENV', {
-                is: 'development',
+                is: 'dev',
                 then: Joi.number().default(4001),
                 otherwise: Joi.number().default(4002),
             }),
