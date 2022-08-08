@@ -4,7 +4,7 @@ service: imoveis-lindoia-api
 frameworkVersion: '3'
 
 custom:
-    functionsBasePath: src/handlers
+    functionsBasePath: handlers
 
 plugins:
     - serverless-plugin-typescript
