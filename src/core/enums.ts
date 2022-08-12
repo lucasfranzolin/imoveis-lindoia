@@ -21,3 +21,8 @@ export enum PropertyTypeEnum {
 export enum GeoType {
     POINT = 'Point',
 }
+
+export enum RealtorStatus {
+    ACTIVE = 'active',
+    PENDING = 'pending',
+}

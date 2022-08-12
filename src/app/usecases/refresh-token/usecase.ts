@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../../../config/config';
-import { AccessDeniedError } from '../../api-errors/AccessDeniedError';
 import { SessionExpiredError } from '../../api-errors/SessionExpiredError';
 import { SessionNotFoundError } from '../../api-errors/SessionNotFoundError';
 import { ISessionsRepository } from '../../repositories/ISessionsRepository';
@@ -31,7 +30,7 @@ export class RefreshTokenUseCase {
         const accessToken = jwt.sign(
             {
                 email: session.props.email,
-            }, //
+            },
             config.jwt.accessToken.secret,
             {
                 expiresIn: config.jwt.accessToken.expiresIn,

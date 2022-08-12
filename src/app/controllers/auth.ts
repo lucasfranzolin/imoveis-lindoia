@@ -4,6 +4,7 @@ import { signInUseCase } from '../usecases/sign-in';
 import { refreshTokenUseCase } from '../usecases/refresh-token';
 import { signUpUseCase } from '../usecases/sign-up';
 import { signOutUseCase } from '../usecases/sign-out';
+import { verifyConfirmationTokenUseCase } from '../usecases/verify-confirmation-token';
 
 export async function signUp(
     req: Request,
@@ -51,6 +52,22 @@ export async function refresh(
 ): Promise<void> {
     try {
         const result = await refreshTokenUseCase.execute(req.body);
+        res.status(httpStatus.OK).json(result);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function verify(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    try {
+        const { confirmationToken } = req.params;
+        const result = await verifyConfirmationTokenUseCase.execute({
+            confirmationToken,
+        });
         res.status(httpStatus.OK).json(result);
     } catch (err) {
         next(err);

@@ -2,10 +2,12 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { config } from '../../../config/config';
 import { Session } from '../../../core/entities/Session';
-import { AccessDeniedError } from '../../api-errors/AccessDeniedError';
+import { RealtorStatus } from '../../../core/enums';
+import { UnverifiedEmailError } from '../../api-errors/UnverifiedEmailError';
 import { RealtorNotFoundError } from '../../api-errors/RealtorNotFoundError';
 import { IRealtorsRepository } from '../../repositories/IRealtorsRepository';
 import { ISessionsRepository } from '../../repositories/ISessionsRepository';
+import { InvalidPasswordError } from '../../api-errors/InvalidPasswordError';
 
 type RequestDTO = {
     email: string;
@@ -25,8 +27,11 @@ export class SignInUseCase {
         const realtor = await this.realtorsRepository.findByEmail(email);
         if (!realtor) throw new RealtorNotFoundError();
 
+        const isPending = realtor.props.status === RealtorStatus.PENDING;
+        if (isPending) throw new UnverifiedEmailError();
+
         const match = await bcrypt.compare(password, realtor.props.password);
-        if (!match) throw new AccessDeniedError('Senha incorreta.');
+        if (!match) throw new InvalidPasswordError();
 
         const refreshToken = jwt.sign(
             {}, //

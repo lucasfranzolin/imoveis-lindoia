@@ -15,7 +15,7 @@
         ]
     },
     "scripts": {
-        "deploy:dev": "sls --stage dev",
+        "deploy:stg": "sls --stage stg",
         "deploy:prod": "sls --stage prod",
         "dev": "NODE_ENV=dev ts-node-dev src/index.ts",
         "lint-staged": "lint-staged",

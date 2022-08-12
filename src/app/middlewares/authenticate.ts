@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../../config/config';
-import { AccessDeniedError } from '../api-errors/AccessDeniedError';
+import { InvalidTokenError } from '../api-errors/InvalidTokenError';
+import { TokenIsMissingError } from '../api-errors/TokenIsMissingError';
 
 export const authHeaderKey = 'authorization';
 
@@ -13,19 +14,13 @@ export const authenticate = async (
     if (config.env === 'dev') return next();
 
     const bearerToken = req.header(authHeaderKey);
-    if (!bearerToken) {
-        return next(
-            new AccessDeniedError(
-                `O token não foi encontrado no '${authHeaderKey} header' da requisição.`
-            )
-        );
-    }
+    if (!bearerToken) return next(new TokenIsMissingError());
 
     try {
         const [, token] = bearerToken.split(' ');
         res.locals.auth = jwt.verify(token, config.jwt.accessToken.secret);
         return next();
     } catch {
-        return next(new AccessDeniedError('Bearer token inválido.'));
+        return next(new InvalidTokenError());
     }
 };

@@ -3,17 +3,18 @@ import * as Joi from 'joi';
 const envVarsSchema = Joi.object()
     .keys({
         NODE_ENV: Joi.string()
-            .valid('prod', 'dev', 'test')
+            .valid('prod', 'stg', 'dev', 'test')
             .default(process.env.NODE_ENV),
         PORT: Joi.number().when('NODE_ENV', {
-            is: 'prod',
-            then: Joi.number().default(80),
+            is: 'test',
+            then: Joi.number().default(4002),
             otherwise: Joi.number().when('NODE_ENV', {
                 is: 'dev',
                 then: Joi.number().default(4001),
-                otherwise: Joi.number().default(4002),
+                otherwise: Joi.number().default(80),
             }),
         }),
+        ENDPOINT: Joi.string().default(process.env.ENDPOINT).required(),
         AWS_S3_ACCESS_KEY: Joi.string()
             .default(process.env.AWS_S3_ACCESS_KEY)
             .required(),
@@ -54,6 +55,9 @@ const envVarsSchema = Joi.object()
         JWT_REFRESH_TOKEN_SECRET: Joi.string()
             .default(process.env.JWT_REFRESH_TOKEN_SECRET)
             .required(),
+        CONFIRMATION_TOKEN_SECRET: Joi.string()
+            .default(process.env.CONFIRMATION_TOKEN_SECRET)
+            .required(),
     })
     .unknown();
 
@@ -61,13 +65,12 @@ const { value: envVars, error } = envVarsSchema
     .prefs({ errors: { label: 'key' } })
     .validate(process.env);
 
-if (error) {
-    throw new Error(`Config validation error: ${error.message}`);
-}
+if (error) throw new Error(`Config validation error: ${error.message}`);
 
 export const config = {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
+    endpoint: envVars.ENDPOINT,
     jwt: {
         accessToken: {
             secret: envVars.JWT_ACCESS_TOKEN_SECRET,
@@ -76,6 +79,9 @@ export const config = {
         refreshToken: {
             secret: envVars.JWT_REFRESH_TOKEN_SECRET,
             expiresIn: 7 * 24 * 60 * 60, // 7 days
+        },
+        confirmationToken: {
+            secret: envVars.CONFIRMATION_TOKEN_SECRET,
         },
     },
     aws: {
@@ -91,7 +97,6 @@ export const config = {
         dbName: envVars.MONGO_DB_NAME,
     },
     mail: {
-        domain: envVars.MAIL_ADDRESS.split('@')[1],
         name: envVars.MAIL_NAME,
         address: envVars.MAIL_ADDRESS,
         host: envVars.MAIL_HOST,
