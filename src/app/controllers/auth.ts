@@ -6,6 +6,7 @@ import { signUpUseCase } from '../usecases/sign-up';
 import { signOutUseCase } from '../usecases/sign-out';
 import { verifyConfirmationTokenUseCase } from '../usecases/verify-confirmation-token';
 import path from 'path';
+import { config } from '../../config/config';
 
 export async function signUp(
     req: Request,
@@ -66,8 +67,8 @@ export async function verify(
 ): Promise<void> {
     try {
         const { confirmationToken } = req.params;
-        // await verifyConfirmationTokenUseCase.execute({ confirmationToken });
-        const fileName = 'account-verified.html';
+        await verifyConfirmationTokenUseCase.execute({ confirmationToken });
+        const fileName = `account-verified.${config.env}.html`;
         const filePath = path.join(__dirname, `../static/${fileName}`);
         res.sendFile(filePath);
     } catch (err) {
