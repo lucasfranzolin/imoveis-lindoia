@@ -23,7 +23,7 @@ app.use(urlencoded({ extended: true }));
 app.use(cors());
 app.use(router);
 app.use((req, res, next) => {
-    next(new RouteNotFoundError(req.path));
+    next(new RouteNotFoundError(req.method, req.path));
 });
 app.use(ignoreFavicon);
 app.use(errorConverter);
