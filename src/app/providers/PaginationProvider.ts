@@ -1,7 +1,8 @@
-import { count } from 'console';
-import httpStatus from 'http-status';
 import { Pagination } from '../../core/types';
-import { ApiError } from '../ApiError';
+import { PaginationFirstPageError } from '../api-errors/PaginationFirstPageError';
+import { PaginationMinLimitError } from '../api-errors/PaginationMinLimitError';
+import { PaginationOrderError } from '../api-errors/PaginationOrderError';
+import { PaginationSortError } from '../api-errors/PaginationSortError';
 import { IPaginationProvider } from './interfaces/IPaginationProvider';
 
 export class PaginationProvider implements IPaginationProvider {
@@ -25,32 +26,21 @@ export class PaginationProvider implements IPaginationProvider {
         allowedSortBy: Array<keyof T> = []
     ): Pagination<T> | never {
         if (Number(limit) < this.minLimit) {
-            throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                `Valor de 'limit' deve ser no minimo ${this.minLimit}.`
-            );
+            throw new PaginationMinLimitError(this.minLimit);
         }
+
         if (![-1, 1].includes(Number(order))) {
-            throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                `O parametro 'order' é inválido, valores permitidos: 1 (ASC) ou -1 (DESC).`
-            );
+            throw new PaginationOrderError([-1, 1]);
         }
         if (Number(page) < this.firstPage) {
-            throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                `A primeira página sempre será a ${this.firstPage}.`
-            );
+            throw new PaginationFirstPageError(this.firstPage);
         }
         if (
             sortBy &&
             allowedSortBy.length > 0 &&
             !allowedSortBy.includes(sortBy)
         ) {
-            throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                `Não é possível ordernar por '${sortBy as string}'`
-            );
+            throw new PaginationSortError(sortBy as string);
         }
         return {
             limit: Number(limit),

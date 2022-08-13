@@ -65,10 +65,8 @@ export async function verify(
 ): Promise<void> {
     try {
         const { confirmationToken } = req.params;
-        const result = await verifyConfirmationTokenUseCase.execute({
-            confirmationToken,
-        });
-        res.status(httpStatus.OK).json(result);
+        await verifyConfirmationTokenUseCase.execute({ confirmationToken });
+        res.status(httpStatus.OK).send();
     } catch (err) {
         next(err);
     }

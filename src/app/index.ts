@@ -5,9 +5,10 @@ import httpStatus from 'http-status';
 
 import { config } from '../config/config';
 import { morgan } from '../config/morgan';
-import { ApiError } from './ApiError';
+import { RouteNotFoundError } from './api-errors/RouteNotFoundError';
 import { errorConverter } from './middlewares/error-converter';
 import { errorHandler } from './middlewares/error-handler';
+import { ignoreFavicon } from './middlewares/ignore-favicon';
 import { router } from './router';
 
 const app: Application = express();
@@ -24,9 +25,10 @@ app.use(cors());
 
 app.use(router);
 app.use((req, res, next) => {
-    next(new ApiError(httpStatus.NOT_FOUND, 'Route not found.'));
+    next(new RouteNotFoundError());
 });
 
+app.use(ignoreFavicon);
 app.use(errorConverter);
 app.use(errorHandler);
 

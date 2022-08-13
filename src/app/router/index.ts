@@ -8,9 +8,7 @@ import { authenticate } from '../middlewares/authenticate';
 const router = Router();
 
 router.get('/hello', (req, res) => {
-    res.status(200).json({
-        msg: 'Hello world!!',
-    });
+    res.status(200).json({ ok: true });
 });
 
 router.use('/auth', authRouter);

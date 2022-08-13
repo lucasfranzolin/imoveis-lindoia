@@ -51,8 +51,3 @@ export type GeoJson<T> = {
     type: GeoType;
     coordinates: T;
 };
-
-export type MediaPreview = {
-    downloadUrl: string;
-    index: number;
-};
