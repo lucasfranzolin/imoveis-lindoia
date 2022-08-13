@@ -9,14 +9,13 @@ export const errorHandler = (
     res: Response,
     next: NextFunction
 ) => {
-    let { statusCode, message } = apiErr;
+    let { statusCode, message, stack } = apiErr;
     const response: Record<string, any> = {
         code: statusCode,
         message,
     };
-    if (config.env !== 'prod') {
-        response.stack = apiErr.stack;
-    }
-    res.statusMessage = message;
+    if (config.env !== 'prod') Object.assign(response, { stack });
+
+    res.statusMessage = message; // use by ../../config/morgan.ts
     res.status(response.code).json(response);
 };

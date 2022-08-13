@@ -1,7 +1,6 @@
 import cors from 'cors';
 import express, { Application, json, urlencoded } from 'express';
 import helmet from 'helmet';
-import httpStatus from 'http-status';
 
 import { config } from '../config/config';
 import { morgan } from '../config/morgan';
@@ -22,12 +21,10 @@ app.use(helmet());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(cors());
-
 app.use(router);
 app.use((req, res, next) => {
-    next(new RouteNotFoundError());
+    next(new RouteNotFoundError(req.path));
 });
-
 app.use(ignoreFavicon);
 app.use(errorConverter);
 app.use(errorHandler);
