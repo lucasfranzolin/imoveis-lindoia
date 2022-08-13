@@ -7,7 +7,6 @@ import { morgan } from '../config/morgan';
 import { RouteNotFoundError } from './api-errors/RouteNotFoundError';
 import { errorConverter } from './middlewares/error-converter';
 import { errorHandler } from './middlewares/error-handler';
-import { ignoreFavicon } from './middlewares/ignore-favicon';
 import { router } from './router';
 
 const app: Application = express();
@@ -25,7 +24,6 @@ app.use(router);
 app.use((req, res, next) => {
     next(new RouteNotFoundError(req.method, req.path));
 });
-app.use(ignoreFavicon);
 app.use(errorConverter);
 app.use(errorHandler);
 

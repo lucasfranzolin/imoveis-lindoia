@@ -14,6 +14,15 @@ const envVarsSchema = Joi.object()
                 otherwise: Joi.number().default(80),
             }),
         }),
+        SIGN_IN_PAGE_URL: Joi.string().when('NODE_ENV', {
+            is: 'dev',
+            then: Joi.string().default('http://localhost:3000/entrar'),
+            otherwise: Joi.string().when('NODE_ENV', {
+                is: 'stg',
+                then: Joi.string().default('http://localhost:3000/entrar'),
+                otherwise: Joi.string().default('http://localhost:3000/entrar'),
+            }),
+        }),
         ENDPOINT: Joi.string().default(process.env.ENDPOINT).required(),
         AWS_S3_ACCESS_KEY: Joi.string()
             .default(process.env.AWS_S3_ACCESS_KEY)
@@ -70,6 +79,7 @@ if (error) throw new Error(`Config validation error: ${error.message}`);
 export const config = {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
+    signInPageUrl: envVars.SIGN_IN_PAGE_URL,
     endpoint: envVars.ENDPOINT,
     jwt: {
         accessToken: {
