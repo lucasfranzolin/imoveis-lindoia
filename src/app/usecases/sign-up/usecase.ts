@@ -8,6 +8,7 @@ import { IMailProvider } from '../../providers/interfaces/IMailProvider';
 import { IRealtorsRepository } from '../../repositories/IRealtorsRepository';
 
 type RequestDTO = {
+    fullName: string;
     email: string;
     password: string;
 };
@@ -18,7 +19,7 @@ export class SignUpUseCase {
         private mailProvider: IMailProvider
     ) {}
 
-    async execute({ email, password }: RequestDTO): Promise<void> {
+    async execute({ fullName, email, password }: RequestDTO): Promise<void> {
         const realtor = await this.realtorsRepository.findByEmail(email);
         if (realtor) throw new EmailAlreadyBeingUsedError(email);
         const passwordHash = bcrypt.hashSync(password, 10);
@@ -30,16 +31,23 @@ export class SignUpUseCase {
         const link = `${config.endpoint}/auth/verify/${confirmationToken}`;
 
         await this.mailProvider.sendMail({
-            body: `<a href="${link}">Clique aqui</a> para confirmar sua conta.`,
+            body: `
+            <div>
+                <h1>Olá, ${fullName}!</h1>
+                <br />
+                <p><a href="${link}">Clique aqui</a> para confirmar sua conta.</p>
+            </div>
+            `,
             subject: 'Seja bem-vindo à plataforma Imóveis Lindóia!',
             to: {
                 email,
-                name: 'Nome do cidadao',
+                name: fullName,
             },
         });
 
         const newRealtor = Realtor.create({
             email,
+            fullName,
             password: passwordHash,
             confirmationToken,
             status: RealtorStatus.PENDING,

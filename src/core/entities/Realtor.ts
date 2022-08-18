@@ -6,7 +6,7 @@ export type Props = {
     address?: Address;
     creci?: string;
     email: string;
-    fullName?: string;
+    fullName: string;
     password: string;
     phone?: string;
     status: RealtorStatus;

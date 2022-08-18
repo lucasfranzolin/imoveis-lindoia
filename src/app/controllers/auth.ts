@@ -59,6 +59,19 @@ export async function refresh(
     }
 }
 
+export async function session(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    try {
+        const { auth } = res.locals;
+        res.status(httpStatus.OK).json(auth);
+    } catch (err) {
+        next(err);
+    }
+}
+
 export async function verify(
     req: Request,
     res: Response,
