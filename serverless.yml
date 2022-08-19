@@ -5,10 +5,14 @@ frameworkVersion: '3'
 
 custom:
     functionsBasePath: handlers
+    stages:
+        - stg
+        - prod
 
 plugins:
     - serverless-plugin-typescript
     - serverless-functions-base-path
+    - serverless-stage-manager
 
 provider:
     name: aws
