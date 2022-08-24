@@ -7,5 +7,6 @@ export class PropertyOwnerNotFoundError extends ApiError {
             httpStatus.NOT_FOUND,
             'O proprietário do imóvel não foi encontrado.'
         );
+        Object.setPrototypeOf(this, ApiError.prototype);
     }
 }

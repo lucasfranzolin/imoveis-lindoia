@@ -32,15 +32,14 @@ export class MongoDataService extends HttpClient implements IMongoDataService {
             collection,
             pipeline,
         });
-        return data;
+        return data.documents;
     }
 
     async countDocuments(collection: string): Promise<number> {
-        const { data } = await this.http.post<{ total: number }>(
-            '/countDocuments',
-            { collection }
-        );
-        return data.total;
+        const { data } = await this.http.post<number>('/countDocuments', {
+            collection,
+        });
+        return data;
     }
 
     async deleteOne<T>(collection: string, filter: Filter<T>): Promise<void> {
@@ -80,8 +79,8 @@ export class MongoDataService extends HttpClient implements IMongoDataService {
             collection,
             filter,
         });
-        if (!data) return null;
-        return data;
+        if (!data.document) return null;
+        return data.document;
     }
 
     async insertOne<T>(collection: string, document: T): Promise<void> {

@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { config } from '../../config/config';
+import { logger } from '../../config/logger';
 import { ApiError } from '../ApiError';
 
 export const errorHandler = (
@@ -14,8 +14,7 @@ export const errorHandler = (
         code: statusCode,
         message,
     };
-    if (config.env !== 'prod') Object.assign(response, { stack });
-
+    logger.error(stack);
     res.statusMessage = message; // use by ../../config/morgan.ts
     res.status(response.code).json(response);
 };

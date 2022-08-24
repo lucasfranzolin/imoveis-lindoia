@@ -3,21 +3,16 @@ import { Server } from 'http';
 
 import { config } from './config/config';
 import { logger } from './config/logger';
-import { mongo } from './config/mongo';
 import { app } from './app';
 
 let server: Server;
 
-mongo.connect().then(() => {
-    logger.info('Connected to MongoDB');
-    server = app.listen(config.port, () => {
-        logger.info(`Server is listening on port ${config.port}`);
-    });
+server = app.listen(config.port, () => {
+    logger.info(`Server is listening on port ${config.port}`);
 });
 
 const exitHandler = () => {
     if (server) {
-        mongo.disconnect();
         server.close(() => {
             logger.info('Server closed');
             process.exit(1);
@@ -43,7 +38,6 @@ process.on('unhandledRejection', unhandledRejection);
 process.on('SIGTERM', () => {
     logger.info('SIGTERM received');
     if (server) {
-        mongo.disconnect();
         server.close();
     }
 });
