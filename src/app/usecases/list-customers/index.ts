@@ -1,8 +1,8 @@
-import { MongoCustomersRepository } from '../../repositories/mongo/MongoCustomersRepository';
+import { CustomersRepository } from '../../repositories/mongo-http/CustomersRepository';
 import { PaginationProvider } from '../../providers/PaginationProvider';
 import { ListCustomersUseCase } from './usecase';
 
-const customersRepository = new MongoCustomersRepository();
+const customersRepository = new CustomersRepository();
 const paginationProvider = new PaginationProvider();
 
 const listCustomersUseCase = new ListCustomersUseCase(

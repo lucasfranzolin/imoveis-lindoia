@@ -1,7 +1,7 @@
-import { MongoPropertiesRepository } from '../../repositories/mongo/MongoPropertiesRepository';
+import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
 import { FindPropertyByIdUseCase } from './usecase';
 
-const propertiesRepository = new MongoPropertiesRepository();
+const propertiesRepository = new PropertiesRepository();
 
 const findPropertyByIdUseCase = new FindPropertyByIdUseCase(
     propertiesRepository

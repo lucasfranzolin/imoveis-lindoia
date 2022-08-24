@@ -1,8 +1,8 @@
-import { MongoPropertiesRepository } from '../../repositories/mongo/MongoPropertiesRepository';
+import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
 import { DeletePropertyByIdUseCase } from './usecase';
 import { AWSProvider } from '../../providers/AWSProvider';
 
-const propertiesRepository = new MongoPropertiesRepository();
+const propertiesRepository = new PropertiesRepository();
 const awsProvider = new AWSProvider();
 
 const deletePropertyByIdUseCase = new DeletePropertyByIdUseCase(

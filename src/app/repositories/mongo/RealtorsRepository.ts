@@ -2,7 +2,7 @@ import { mongo } from '../../../config/mongo';
 import { Realtor } from '../../../core/entities/Realtor';
 import { IRealtorsRepository } from '../IRealtorsRepository';
 
-export class MongoRealtorsRepository implements IRealtorsRepository {
+export class RealtorsRepository implements IRealtorsRepository {
     private readonly collection = 'realtors';
 
     async findByEmail(email: string): Promise<Realtor | null> {

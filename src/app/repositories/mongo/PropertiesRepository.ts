@@ -6,9 +6,8 @@ import {
 import { Pagination } from '../../../core/types';
 import { IPropertiesRepository } from '../IPropertiesRepository';
 
-export class MongoPropertiesRepository implements IPropertiesRepository {
+export class PropertiesRepository implements IPropertiesRepository {
     private readonly collection = 'properties';
-
     private locationIndex: string = 'locationIndex';
     private locationIndexExists: boolean = false;
 

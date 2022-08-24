@@ -1,8 +1,8 @@
-import { MongoPropertiesRepository } from '../../repositories/mongo/MongoPropertiesRepository';
+import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
 import { PaginationProvider } from '../../providers/PaginationProvider';
 import { ListPropertiesUseCase } from './usecase';
 
-const propertiesRepository = new MongoPropertiesRepository();
+const propertiesRepository = new PropertiesRepository();
 const paginationProvider = new PaginationProvider();
 
 const listPropertiesUseCase = new ListPropertiesUseCase(

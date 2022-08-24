@@ -18,7 +18,7 @@ const disconnect = async () => {
     connection = null;
 };
 
-const getDb = (): Db => connection!.db(config.mongo.dbName);
+const getDb = (): Db => connection!.db(config.mongo.database);
 
 export const mongo = {
     connect,

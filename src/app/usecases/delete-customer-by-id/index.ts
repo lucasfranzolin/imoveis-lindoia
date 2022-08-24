@@ -1,9 +1,9 @@
-import { MongoPropertiesRepository } from '../../repositories/mongo/MongoPropertiesRepository';
-import { MongoCustomersRepository } from '../../repositories/mongo/MongoCustomersRepository';
+import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
+import { CustomersRepository } from '../../repositories/mongo-http/CustomersRepository';
 import { DeleteCustomerByIdUseCase } from './usecase';
 
-const customersRepository = new MongoCustomersRepository();
-const propertiesRepository = new MongoPropertiesRepository();
+const customersRepository = new CustomersRepository();
+const propertiesRepository = new PropertiesRepository();
 
 const deleteCustomerByIdUseCase = new DeleteCustomerByIdUseCase(
     customersRepository,

@@ -1,7 +1,7 @@
 import { VerifyConfirmationTokenUseCase } from './usecase';
-import { MongoRealtorsRepository } from '../../repositories/mongo/MongoRealtorsRepository';
+import { RealtorsRepository } from '../../repositories/mongo-http/RealtorsRepository';
 
-const realtorsRepository = new MongoRealtorsRepository();
+const realtorsRepository = new RealtorsRepository();
 
 const verifyConfirmationTokenUseCase = new VerifyConfirmationTokenUseCase(
     realtorsRepository

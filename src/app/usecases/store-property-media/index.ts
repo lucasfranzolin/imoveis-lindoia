@@ -1,8 +1,8 @@
-import { MongoPropertiesRepository } from '../../repositories/mongo/MongoPropertiesRepository';
+import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
 import { AWSProvider } from '../../providers/AWSProvider';
 import { StorePropertyMediaUseCase } from './usecase';
 
-const propertiesRepository = new MongoPropertiesRepository();
+const propertiesRepository = new PropertiesRepository();
 const awsProvider = new AWSProvider();
 
 const storePropertyMediaUseCase = new StorePropertyMediaUseCase(

@@ -1,7 +1,7 @@
-import { MongoSessionsRepository } from '../../repositories/mongo/MongoSessionsRepository';
+import { SessionsRepository } from '../../repositories/mongo-http/SessionsRepository';
 import { SignOutUseCase } from './usecase';
 
-const sessionsRepository = new MongoSessionsRepository();
+const sessionsRepository = new SessionsRepository();
 
 const signOutUseCase = new SignOutUseCase(sessionsRepository);
 

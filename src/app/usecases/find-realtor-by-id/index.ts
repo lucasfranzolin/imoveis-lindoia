@@ -1,7 +1,7 @@
-import { MongoRealtorsRepository } from '../../repositories/mongo/MongoRealtorsRepository';
+import { RealtorsRepository } from '../../repositories/mongo-http/RealtorsRepository';
 import { FindRealtorByIdUseCase } from './usecase';
 
-const realtorsRepository = new MongoRealtorsRepository();
+const realtorsRepository = new RealtorsRepository();
 
 const findRealtorByIdUseCase = new FindRealtorByIdUseCase(realtorsRepository);
 

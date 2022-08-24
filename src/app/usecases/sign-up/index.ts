@@ -1,8 +1,8 @@
 import { SignUpUseCase } from './usecase';
-import { MongoRealtorsRepository } from '../../repositories/mongo/MongoRealtorsRepository';
+import { RealtorsRepository } from '../../repositories/mongo-http/RealtorsRepository';
 import { MailProvider } from '../../providers/MailProvider';
 
-const realtorsRepository = new MongoRealtorsRepository();
+const realtorsRepository = new RealtorsRepository();
 const mailProvider = new MailProvider();
 
 const signUpUseCase = new SignUpUseCase(realtorsRepository, mailProvider);

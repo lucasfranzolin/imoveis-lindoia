@@ -1,9 +1,9 @@
-import { MongoRealtorsRepository } from '../../repositories/mongo/MongoRealtorsRepository';
-import { MongoSessionsRepository } from '../../repositories/mongo/MongoSessionsRepository';
+import { RealtorsRepository } from '../../repositories/mongo-http/RealtorsRepository';
+import { SessionsRepository } from '../../repositories/mongo-http/SessionsRepository';
 import { SignInUseCase } from './usecase';
 
-const realtorsRepository = new MongoRealtorsRepository();
-const sessionsRepository = new MongoSessionsRepository();
+const realtorsRepository = new RealtorsRepository();
+const sessionsRepository = new SessionsRepository();
 
 const signInUseCase = new SignInUseCase(realtorsRepository, sessionsRepository);
 

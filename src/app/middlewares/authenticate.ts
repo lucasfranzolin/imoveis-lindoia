@@ -4,14 +4,14 @@ import { config } from '../../config/config';
 import { InvalidTokenError } from '../api-errors/InvalidTokenError';
 import { TokenIsMissingError } from '../api-errors/TokenIsMissingError';
 
-export const authHeaderKey = 'authorization';
-
 export const authenticate = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    const bearerToken = req.header(authHeaderKey);
+    if (config.env === 'dev') return next();
+
+    const bearerToken = req.header('authorization');
     if (!bearerToken) return next(new TokenIsMissingError());
 
     try {

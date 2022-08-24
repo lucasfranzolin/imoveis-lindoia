@@ -1,7 +1,7 @@
-import { MongoSessionsRepository } from '../../repositories/mongo/MongoSessionsRepository';
+import { SessionsRepository } from '../../repositories/mongo-http/SessionsRepository';
 import { RefreshTokenUseCase } from './usecase';
 
-const sessionsRepository = new MongoSessionsRepository();
+const sessionsRepository = new SessionsRepository();
 
 const refreshTokenUseCase = new RefreshTokenUseCase(sessionsRepository);
 

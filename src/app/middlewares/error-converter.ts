@@ -12,8 +12,16 @@ export const errorConverter = (
     if (err instanceof ApiError) {
         next(err);
     }
-    const { statusCode, message, stack } = err;
-    const code = statusCode ?? httpStatus.INTERNAL_SERVER_ERROR;
-    const msg = message ?? httpStatus[code];
-    next(new ApiError(code, msg, stack));
+    const { status, data } = err.response;
+    const code = status
+        ? status
+        : err.statusCode
+        ? err.statusCode
+        : httpStatus.INTERNAL_SERVER_ERROR;
+    const msg = data
+        ? JSON.stringify(data)
+        : err.message
+        ? err.message
+        : httpStatus[code];
+    next(new ApiError(code, msg, err.stack));
 };

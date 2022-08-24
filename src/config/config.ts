@@ -36,6 +36,12 @@ const envVarsSchema = Joi.object()
         AWS_S3_BUCKET_NAME: Joi.string()
             .default(process.env.AWS_S3_BUCKET_NAME)
             .required(),
+        MONGO_URL_ENDPOINT: Joi.string()
+            .default(process.env.MONGO_URL_ENDPOINT)
+            .required(),
+        MONGO_DATA_API_KEY: Joi.string()
+            .default(process.env.MONGO_DATA_API_KEY)
+            .required(),
         MONGO_USER: Joi.string().default(process.env.MONGO_USER).required(),
         MONGO_PASSWORD: Joi.string()
             .default(process.env.MONGO_PASSWORD)
@@ -103,8 +109,11 @@ export const config = {
         },
     },
     mongo: {
+        apiKey: envVars.MONGO_DATA_API_KEY,
+        baseURL: envVars.MONGO_URL_ENDPOINT,
+        database: envVars.MONGO_DB_NAME,
+        dataSource: envVars.MONGO_CLUSTER_NAME,
         url: `mongodb+srv://${envVars.MONGO_USER}:${envVars.MONGO_PASSWORD}@${envVars.MONGO_CLUSTER_NAME}.sl2p2.mongodb.net`,
-        dbName: envVars.MONGO_DB_NAME,
     },
     mail: {
         name: envVars.MAIL_NAME,

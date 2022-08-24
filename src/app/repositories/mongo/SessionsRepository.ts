@@ -2,7 +2,7 @@ import { mongo } from '../../../config/mongo';
 import { Session } from '../../../core/entities/Session';
 import { ISessionsRepository } from '../ISessionsRepository';
 
-export class MongoSessionsRepository implements ISessionsRepository {
+export class SessionsRepository implements ISessionsRepository {
     private readonly collection = 'sessions';
 
     async get(refreshToken: string): Promise<Session | null> {

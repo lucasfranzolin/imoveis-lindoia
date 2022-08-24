@@ -1,9 +1,9 @@
-import { MongoCustomersRepository } from '../../repositories/mongo/MongoCustomersRepository';
-import { MongoPropertiesRepository } from '../../repositories/mongo/MongoPropertiesRepository';
+import { CustomersRepository } from '../../repositories/mongo-http/CustomersRepository';
+import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
 import { SavePropertyUseCase } from './usecase';
 
-const propertiesRepository = new MongoPropertiesRepository();
-const customersRepository = new MongoCustomersRepository();
+const propertiesRepository = new PropertiesRepository();
+const customersRepository = new CustomersRepository();
 
 const savePropertyUseCase = new SavePropertyUseCase(
     propertiesRepository,
