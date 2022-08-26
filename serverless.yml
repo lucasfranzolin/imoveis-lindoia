@@ -18,6 +18,7 @@ provider:
     name: aws
     runtime: nodejs14.x
     environment: ${file(./serverless.env.js)}
+    timeout: 10
 
 functions:
     api:
