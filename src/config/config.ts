@@ -19,8 +19,10 @@ const envVarsSchema = Joi.object()
             then: Joi.string().default('http://localhost:3000/entrar'),
             otherwise: Joi.string().when('NODE_ENV', {
                 is: 'stg',
-                then: Joi.string().default('http://localhost:3000/entrar'),
-                otherwise: Joi.string().default('http://localhost:3000/entrar'),
+                then: Joi.string().default(
+                    'https://imoveis-lindoia-app-git-stg-lucasfranzolin.vercel.app/entrar'
+                ),
+                otherwise: Joi.string().default(''),
             }),
         }),
         ENDPOINT: Joi.string().default(process.env.ENDPOINT).required(),
