@@ -1,4 +1,4 @@
-import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
+import { PropertiesRepository } from '../../repositories/mongo/PropertiesRepository';
 import { PaginationProvider } from '../../providers/PaginationProvider';
 import { ListPropertiesUseCase } from './usecase';
 

@@ -1,5 +1,5 @@
 import { SignUpUseCase } from './usecase';
-import { RealtorsRepository } from '../../repositories/mongo-http/RealtorsRepository';
+import { RealtorsRepository } from '../../repositories/mongo/RealtorsRepository';
 import { MailProvider } from '../../providers/MailProvider';
 
 const realtorsRepository = new RealtorsRepository();

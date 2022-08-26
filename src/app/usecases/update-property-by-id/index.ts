@@ -1,5 +1,5 @@
-import { CustomersRepository } from '../../repositories/mongo-http/CustomersRepository';
-import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
+import { CustomersRepository } from '../../repositories/mongo/CustomersRepository';
+import { PropertiesRepository } from '../../repositories/mongo/PropertiesRepository';
 import { UpdateProperyByIdUseCase } from './usecase';
 
 const propertiesRepository = new PropertiesRepository();

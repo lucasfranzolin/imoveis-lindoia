@@ -1,4 +1,4 @@
-import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
+import { PropertiesRepository } from '../../repositories/mongo/PropertiesRepository';
 import { AWSProvider } from '../../providers/AWSProvider';
 import { StorePropertyMediaUseCase } from './usecase';
 

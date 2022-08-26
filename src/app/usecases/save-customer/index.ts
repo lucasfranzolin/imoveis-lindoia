@@ -1,4 +1,4 @@
-import { CustomersRepository } from '../../repositories/mongo-http/CustomersRepository';
+import { CustomersRepository } from '../../repositories/mongo/CustomersRepository';
 import { SaveCustomerUseCase } from './usecase';
 
 const customerRepository = new CustomersRepository();

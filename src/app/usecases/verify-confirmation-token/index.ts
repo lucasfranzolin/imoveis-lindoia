@@ -1,5 +1,5 @@
 import { VerifyConfirmationTokenUseCase } from './usecase';
-import { RealtorsRepository } from '../../repositories/mongo-http/RealtorsRepository';
+import { RealtorsRepository } from '../../repositories/mongo/RealtorsRepository';
 
 const realtorsRepository = new RealtorsRepository();
 

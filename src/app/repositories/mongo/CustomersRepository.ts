@@ -1,46 +1,43 @@
+import { mongo } from '../../../config/mongo';
 import { Pagination } from '../../../core/types';
 import {
     Customer,
     Props as CustomerProps,
 } from '../../../core/entities/Customer';
 import { ICustomersRepository } from '../ICustomersRepository';
-import { IMongoDataService } from '../../services/interfaces/IMongoDataService';
-import { MongoDataService } from '../../services/MongoDataService';
 
 export class CustomersRepository implements ICustomersRepository {
     private readonly collection = 'customers';
-    private mongoDataService: IMongoDataService;
-
-    constructor() {
-        this.mongoDataService = new MongoDataService();
-    }
 
     async count(): Promise<number> {
-        return await this.mongoDataService.countDocuments(this.collection);
+        return await (await mongo.getDb())
+            .collection(this.collection)
+            .countDocuments();
     }
 
     async deleteById(customerId: string): Promise<void> {
         const filter = { uuid: customerId };
-        await this.mongoDataService.deleteOne<Customer>(
-            this.collection,
-            filter
-        );
+        await (await mongo.getDb())
+            .collection(this.collection)
+            .deleteOne(filter);
     }
 
     async findByEmail(email: string): Promise<Customer | null> {
         const filter = { 'props.email': email };
-        return await this.mongoDataService.findOne<Customer>(
-            this.collection,
-            filter
-        );
+        const doc = await (await mongo.getDb())
+            .collection(this.collection)
+            .findOne(filter);
+        if (!doc) return null;
+        return new Customer(doc.props, doc.uuid);
     }
 
     async findById(customerId: string): Promise<Customer | null> {
         const filter = { uuid: customerId };
-        return await this.mongoDataService.findOne<Customer>(
-            this.collection,
-            filter
-        );
+        const doc = await (await mongo.getDb())
+            .collection(this.collection)
+            .findOne(filter);
+        if (!doc) return null;
+        return new Customer(doc.props, doc.uuid);
     }
 
     async list({
@@ -57,26 +54,27 @@ export class CustomersRepository implements ICustomersRepository {
             const by = `props.${sortBy}`;
             agg.unshift({ $sort: { [by]: order } } as any);
         }
-        return await this.mongoDataService.aggregate(this.collection, agg);
+        const docs = await (await mongo.getDb())
+            .collection(this.collection)
+            .aggregate(agg)
+            .toArray();
+        return docs.map((doc) => new Customer(doc.props, doc.uuid));
     }
 
     async save(customer: Customer): Promise<void> {
-        await this.mongoDataService.insertOne<Customer>(
-            this.collection,
-            customer
-        );
+        await (await mongo.getDb())
+            .collection(this.collection)
+            .insertOne({ ...customer });
     }
 
     async update(customer: Customer): Promise<void> {
         const filter = { uuid: customer.id };
-        await this.mongoDataService.updateOne<Customer>(
-            this.collection,
-            filter,
-            {
+        await (await mongo.getDb())
+            .collection(this.collection)
+            .updateOne(filter, {
                 $set: {
                     props: customer.props,
                 },
-            }
-        );
+            });
     }
 }

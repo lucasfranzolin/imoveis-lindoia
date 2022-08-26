@@ -1,5 +1,5 @@
-import { RealtorsRepository } from '../../repositories/mongo-http/RealtorsRepository';
-import { SessionsRepository } from '../../repositories/mongo-http/SessionsRepository';
+import { RealtorsRepository } from '../../repositories/mongo/RealtorsRepository';
+import { SessionsRepository } from '../../repositories/mongo/SessionsRepository';
 import { SignInUseCase } from './usecase';
 
 const realtorsRepository = new RealtorsRepository();

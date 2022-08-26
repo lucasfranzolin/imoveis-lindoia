@@ -1,4 +1,4 @@
-import { PropertiesRepository } from '../../repositories/mongo-http/PropertiesRepository';
+import { PropertiesRepository } from '../../repositories/mongo/PropertiesRepository';
 import { DeletePropertyByIdUseCase } from './usecase';
 import { AWSProvider } from '../../providers/AWSProvider';
 

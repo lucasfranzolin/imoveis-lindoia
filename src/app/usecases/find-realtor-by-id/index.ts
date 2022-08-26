@@ -1,4 +1,4 @@
-import { RealtorsRepository } from '../../repositories/mongo-http/RealtorsRepository';
+import { RealtorsRepository } from '../../repositories/mongo/RealtorsRepository';
 import { FindRealtorByIdUseCase } from './usecase';
 
 const realtorsRepository = new RealtorsRepository();

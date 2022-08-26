@@ -2,26 +2,25 @@ import { Db, MongoClient } from 'mongodb';
 
 import { config } from './config';
 
-let connection: MongoClient | null;
+let cached: Db | null;
+let cachedClient: MongoClient | null;
 
-const connect = (): Promise<MongoClient> => {
-    if (!connection) {
-        connection = new MongoClient(config.mongo.url);
+const getDb = async (): Promise<Db> => {
+    if (cached) return cached;
+    if (!cachedClient) {
+        cachedClient = await new MongoClient(config.mongo.url).connect();
     }
-    return connection.connect();
+    cached = cachedClient.db();
+    return cached;
 };
 
 const disconnect = async () => {
-    if (connection) {
-        await connection.close();
-    }
-    connection = null;
+    if (cachedClient) await cachedClient.close();
+    cachedClient = null;
+    cached = null;
 };
 
-const getDb = (): Db => connection!.db(config.mongo.database);
-
 export const mongo = {
-    connect,
-    disconnect,
     getDb,
+    disconnect,
 };
