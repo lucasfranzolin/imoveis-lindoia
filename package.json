@@ -10,8 +10,7 @@
     "lint-staged": {
         "src/**/*.+(json|ts)": [
             "eslint --fix",
-            "prettier --write .",
-            "jest"
+            "prettier --write ."
         ]
     },
     "scripts": {

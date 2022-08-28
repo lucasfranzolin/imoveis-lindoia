@@ -21,13 +21,8 @@ export class SignInUseCase {
     ) {}
 
     async execute({ email, password }: RequestDTO): Promise<{
-        auth: {
-            accessToken: string;
-            refreshToken: string;
-        };
-        user: {
-            email: string;
-        };
+        accessToken: string;
+        refreshToken: string;
     }> {
         const realtor = await this.realtorsRepository.findByEmail(email);
         if (!realtor) throw new RealtorNotFoundError();
@@ -63,13 +58,8 @@ export class SignInUseCase {
         );
 
         return {
-            auth: {
-                accessToken,
-                refreshToken,
-            },
-            user: {
-                email,
-            },
+            accessToken,
+            refreshToken,
         };
     }
 }
