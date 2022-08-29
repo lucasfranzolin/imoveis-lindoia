@@ -19,6 +19,7 @@ provider:
     runtime: nodejs16.x
     timeout: 10
     environment:
+        NODE_ENV: ${opt:stage}
         ENDPOINT: ${param:ENDPOINT}
         AWS_S3_ACCESS_KEY: ${param:AWS_S3_ACCESS_KEY}
         AWS_S3_SECRET_KEY: ${param:AWS_S3_SECRET_KEY}
