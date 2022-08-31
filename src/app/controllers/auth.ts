@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
-import { signInUseCase } from '../usecases/sign-in';
-import { refreshTokenUseCase } from '../usecases/refresh-token';
-import { signUpUseCase } from '../usecases/sign-up';
-import { signOutUseCase } from '../usecases/sign-out';
-import { verifyConfirmationTokenUseCase } from '../usecases/verify-confirmation-token';
+
 import { config } from '../../config/config';
+import { refreshTokenUseCase } from '../usecases/refresh-token';
+import { signInUseCase } from '../usecases/sign-in';
+import { signOutUseCase } from '../usecases/sign-out';
+import { signUpUseCase } from '../usecases/sign-up';
+import { verifyConfirmationTokenUseCase } from '../usecases/verify-confirmation-token';
 
 export async function signUp(
     req: Request,
@@ -66,7 +67,9 @@ export async function session(
 ): Promise<void> {
     try {
         const { auth } = res.locals;
-        res.status(httpStatus.OK).json(auth);
+        res.status(httpStatus.OK).json({
+            email: auth.email,
+        });
     } catch (err) {
         next(err);
     }

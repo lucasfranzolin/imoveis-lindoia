@@ -1,6 +1,6 @@
 import { Entity } from '../domain/Entity';
-import { DealMediation } from '../types';
 import { DealEnum } from '../enums';
+import { DealMediation } from '../types';
 
 export type Props = DealMediation & {
     DealEnum: DealEnum;

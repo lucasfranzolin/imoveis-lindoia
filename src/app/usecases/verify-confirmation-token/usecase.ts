@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+
 import { config } from '../../../config/config';
 import { Realtor } from '../../../core/entities/Realtor';
 import { RealtorStatus } from '../../../core/enums';

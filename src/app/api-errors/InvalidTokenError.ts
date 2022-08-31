@@ -3,7 +3,7 @@ import { AccessDeniedError } from './AccessDeniedError';
 
 export class InvalidTokenError extends AccessDeniedError {
     constructor() {
-        super('Link de verificação inválido.');
+        super('Token inválido.');
         Object.setPrototypeOf(this, ApiError.prototype);
     }
 }

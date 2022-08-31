@@ -1,13 +1,14 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+
 import { config } from '../../../config/config';
 import { Session } from '../../../core/entities/Session';
 import { RealtorStatus } from '../../../core/enums';
-import { UnverifiedEmailError } from '../../api-errors/UnverifiedEmailError';
+import { InvalidPasswordError } from '../../api-errors/InvalidPasswordError';
 import { RealtorNotFoundError } from '../../api-errors/RealtorNotFoundError';
+import { UnverifiedEmailError } from '../../api-errors/UnverifiedEmailError';
 import { IRealtorsRepository } from '../../repositories/IRealtorsRepository';
 import { ISessionsRepository } from '../../repositories/ISessionsRepository';
-import { InvalidPasswordError } from '../../api-errors/InvalidPasswordError';
 
 type RequestDTO = {
     email: string;

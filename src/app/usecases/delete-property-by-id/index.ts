@@ -1,6 +1,6 @@
+import { AWSProvider } from '../../providers/AWSProvider';
 import { PropertiesRepository } from '../../repositories/mongo/PropertiesRepository';
 import { DeletePropertyByIdUseCase } from './usecase';
-import { AWSProvider } from '../../providers/AWSProvider';
 
 const propertiesRepository = new PropertiesRepository();
 const awsProvider = new AWSProvider();

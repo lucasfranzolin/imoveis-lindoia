@@ -16,9 +16,9 @@
     "scripts": {
         "deploy:stg": "serverless deploy -s stg -r us-east-1",
         "deploy:prod": "serverless deploy -s prod -r us-east-1",
-        "dev": "ts-node-dev src/index.ts",
+        "dev": "NODE_ENV=dev ts-node-dev src/index.ts",
         "lint-staged": "lint-staged",
-        "lint": "prettier --write . && eslint --ext .ts .",
+        "lint": "prettier --write . && eslint --ext .ts . --fix",
         "prepare": "husky install",
         "test": "jest --passWithNoTests"
     },

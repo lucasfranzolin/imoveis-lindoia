@@ -1,4 +1,5 @@
 import httpStatus from 'http-status';
+
 import { Customer } from '../../../core/entities/Customer';
 import { EmailAlreadyBeingUsedError } from '../../api-errors/EmailAlreadyBeingUsedError';
 import { ApiError } from '../../ApiError';

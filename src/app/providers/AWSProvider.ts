@@ -2,10 +2,10 @@ import AWS from 'aws-sdk';
 import crypto from 'crypto';
 import formidable from 'formidable';
 import fs from 'fs';
+import { Observable } from 'rxjs';
 
 import { config } from '../../config/config';
 import { IAWSProvider, UploadProgress } from './interfaces/IAWSProvider';
-import { Observable } from 'rxjs';
 
 export class AWSProvider implements IAWSProvider {
     private s3: AWS.S3;

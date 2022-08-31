@@ -1,6 +1,6 @@
 import * as winston from 'winston';
-import { ApiError } from '../app/ApiError';
 
+import { ApiError } from '../app/ApiError';
 import { config } from './config';
 
 const enumerateErrorFormat = winston.format((info) => {

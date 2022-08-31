@@ -1,8 +1,8 @@
-import { Pagination, PaginationResult } from '../../../core/types';
 import {
     Property,
     Props as PropertyProps,
 } from '../../../core/entities/Property';
+import { Pagination, PaginationResult } from '../../../core/types';
 import { IPaginationProvider } from '../../providers/interfaces/IPaginationProvider';
 import { IPropertiesRepository } from '../../repositories/IPropertiesRepository';
 

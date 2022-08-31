@@ -1,5 +1,5 @@
-import { Pagination, PaginationResult } from '../../core/types';
 import { Customer, Props as CustomerProps } from '../../core/entities/Customer';
+import { Pagination, PaginationResult } from '../../core/types';
 
 export interface ICustomersRepository {
     count(): Promise<number>;

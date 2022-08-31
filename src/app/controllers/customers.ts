@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
+
 import { deleteCustomerByIdUseCase } from '../usecases/delete-customer-by-id';
 import { findCustomerByIdUseCase } from '../usecases/find-customer-by-id';
-
 import { listCustomersUseCase } from '../usecases/list-customers';
 import { saveCustomerUseCase } from '../usecases/save-customer';
 import { updateCustomerByIdUseCase } from '../usecases/update-customer-by-id';

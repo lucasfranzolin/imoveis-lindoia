@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+
 import { config } from '../../config/config';
 import { InvalidTokenError } from '../api-errors/InvalidTokenError';
 import { TokenIsMissingError } from '../api-errors/TokenIsMissingError';
@@ -9,7 +10,7 @@ export const authenticate = async (
     res: Response,
     next: NextFunction
 ) => {
-    if (config.env === 'dev') return next();
+    // if (config.env === 'dev') return next();
 
     const bearerToken = req.header('authorization');
     if (!bearerToken) return next(new TokenIsMissingError());

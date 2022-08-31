@@ -1,10 +1,10 @@
 import formidable from 'formidable';
+import { combineLatest, map, Observable } from 'rxjs';
 
 import { config } from '../../../config/config';
+import { PropertyNotFoundError } from '../../api-errors/PropertyNotFoundError';
 import { IAWSProvider } from '../../providers/interfaces/IAWSProvider';
 import { IPropertiesRepository } from '../../repositories/IPropertiesRepository';
-import { PropertyNotFoundError } from '../../api-errors/PropertyNotFoundError';
-import { combineLatest, map, Observable } from 'rxjs';
 
 type RequestDTO = {
     id: string;

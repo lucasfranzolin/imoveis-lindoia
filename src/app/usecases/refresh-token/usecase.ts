@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+
 import { config } from '../../../config/config';
 import { SessionExpiredError } from '../../api-errors/SessionExpiredError';
 import { SessionNotFoundError } from '../../api-errors/SessionNotFoundError';

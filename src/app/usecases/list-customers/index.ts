@@ -1,5 +1,5 @@
-import { CustomersRepository } from '../../repositories/mongo/CustomersRepository';
 import { PaginationProvider } from '../../providers/PaginationProvider';
+import { CustomersRepository } from '../../repositories/mongo/CustomersRepository';
 import { ListCustomersUseCase } from './usecase';
 
 const customersRepository = new CustomersRepository();

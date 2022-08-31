@@ -1,10 +1,10 @@
-import { Pagination, PaginationResult } from '../../../core/types';
 import {
     Customer,
     Props as CustomerProps,
 } from '../../../core/entities/Customer';
-import { ICustomersRepository } from '../../repositories/ICustomersRepository';
+import { Pagination, PaginationResult } from '../../../core/types';
 import { IPaginationProvider } from '../../providers/interfaces/IPaginationProvider';
+import { ICustomersRepository } from '../../repositories/ICustomersRepository';
 
 export type RequestDTO = Pagination<CustomerProps>;
 

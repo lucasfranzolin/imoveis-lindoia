@@ -1,6 +1,6 @@
-import { Address } from '../types';
 import { Entity } from '../domain/Entity';
 import { RealtorStatus } from '../enums';
+import { Address } from '../types';
 
 export type Props = {
     address?: Address;

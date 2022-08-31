@@ -1,8 +1,8 @@
 import { createTransport } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import { config } from '../../config/config';
 
+import { config } from '../../config/config';
 import { IMailProvider, IMessage } from './interfaces/IMailProvider';
 
 export class MailProvider implements IMailProvider {

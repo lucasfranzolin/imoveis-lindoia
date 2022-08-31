@@ -5,9 +5,9 @@ import {
     PropertyTypeEnum,
 } from '../../../core/enums';
 import { Address, PointCoordinates, Price } from '../../../core/types';
+import { PropertyOwnerNotFoundError } from '../../api-errors/PropertyOwnerNotFoundError';
 import { ICustomersRepository } from '../../repositories/ICustomersRepository';
 import { IPropertiesRepository } from '../../repositories/IPropertiesRepository';
-import { PropertyOwnerNotFoundError } from '../../api-errors/PropertyOwnerNotFoundError';
 
 export type RequestDTO = {
     address: Address;

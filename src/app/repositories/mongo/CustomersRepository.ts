@@ -1,9 +1,9 @@
 import { mongo } from '../../../config/mongo';
-import { Pagination } from '../../../core/types';
 import {
     Customer,
     Props as CustomerProps,
 } from '../../../core/entities/Customer';
+import { Pagination } from '../../../core/types';
 import { ICustomersRepository } from '../ICustomersRepository';
 
 export class CustomersRepository implements ICustomersRepository {

@@ -1,20 +1,20 @@
 import { NextFunction, Request, Response } from 'express';
 import formidable from 'formidable';
+import fs from 'fs';
 import httpStatus from 'http-status';
 import path from 'path';
+
 import { config } from '../../config/config';
 import { PropertyPurposeEnum } from '../../core/enums';
-import fs from 'fs';
-
+import { deletePropertyByIdUseCase } from '../usecases/delete-property-by-id';
+import { findPropertyByIdUseCase } from '../usecases/find-property-by-id';
+import { getPropertyMediaUseCase } from '../usecases/get-property-media';
 import { getPropertyPurposesUseCase } from '../usecases/get-property-purposes';
 import { getPropertyTypeByPurposeUseCase } from '../usecases/get-property-type-by-purpose';
+import { listPropertiesUseCase } from '../usecases/list-properties';
 import { savePropertyUseCase } from '../usecases/save-property';
 import { storePropertyMediaUseCase } from '../usecases/store-property-media';
-import { listPropertiesUseCase } from '../usecases/list-properties';
-import { getPropertyMediaUseCase } from '../usecases/get-property-media';
-import { findPropertyByIdUseCase } from '../usecases/find-property-by-id';
 import { updatePropertyByIdUseCase } from '../usecases/update-property-by-id';
-import { deletePropertyByIdUseCase } from '../usecases/delete-property-by-id';
 
 export async function save(
     req: Request,

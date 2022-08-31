@@ -1,5 +1,5 @@
-import { propertyTypesByPurpose } from '../../../core/maps/propertyTypesByPurpose';
 import { PropertyPurposeEnum, PropertyTypeEnum } from '../../../core/enums';
+import { propertyTypesByPurpose } from '../../../core/maps/propertyTypesByPurpose';
 
 type RequestDTO = {
     purpose: PropertyPurposeEnum;

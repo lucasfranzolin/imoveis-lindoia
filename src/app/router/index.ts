@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
+import { authenticate } from '../middlewares/authenticate';
 import { authRouter } from './auth';
 import { customersRouter } from './customers';
 import { propertiesRouter } from './properties';
-import { authenticate } from '../middlewares/authenticate';
 
 const router = Router();
 

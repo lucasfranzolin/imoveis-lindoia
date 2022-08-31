@@ -1,9 +1,10 @@
 import httpStatus from 'http-status';
+
 import { Property } from '../../../core/entities/Property';
 import { GeoType } from '../../../core/enums';
-import { ApiError } from '../../ApiError';
 import { PropertyNotFoundError } from '../../api-errors/PropertyNotFoundError';
 import { PropertyOwnerNotFoundError } from '../../api-errors/PropertyOwnerNotFoundError';
+import { ApiError } from '../../ApiError';
 import { ICustomersRepository } from '../../repositories/ICustomersRepository';
 import { IPropertiesRepository } from '../../repositories/IPropertiesRepository';
 import { RequestDTO as SaveRequestDTO } from '../save-property/usecase';

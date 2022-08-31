@@ -1,4 +1,5 @@
 import httpStatus from 'http-status';
+
 import { ApiError } from '../ApiError';
 
 export class CustomerNotFoundError extends ApiError {

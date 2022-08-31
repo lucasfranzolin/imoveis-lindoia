@@ -1,5 +1,5 @@
-import { PropertiesRepository } from '../../repositories/mongo/PropertiesRepository';
 import { CustomersRepository } from '../../repositories/mongo/CustomersRepository';
+import { PropertiesRepository } from '../../repositories/mongo/PropertiesRepository';
 import { DeleteCustomerByIdUseCase } from './usecase';
 
 const customersRepository = new CustomersRepository();
