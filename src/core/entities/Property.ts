@@ -1,6 +1,6 @@
 import { Entity } from '../domain/Entity';
 import { PropertyPurposeEnum, PropertyTypeEnum } from '../enums';
-import { Address, GeoJson, PointCoordinates,Price } from '../types';
+import { Address, GeoJson, PointCoordinates, Price } from '../types';
 
 export type Props = {
     address: Address;

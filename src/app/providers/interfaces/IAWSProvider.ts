@@ -1,3 +1,4 @@
+import AWS from 'aws-sdk';
 import formidable from 'formidable';
 import { Observable } from 'rxjs';
 

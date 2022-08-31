@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export enum DealEnum {
     SALE = 'venda',
     RENT = 'aluguel',
