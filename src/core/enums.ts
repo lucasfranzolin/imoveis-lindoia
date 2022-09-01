@@ -27,3 +27,7 @@ export enum RealtorStatus {
     ACTIVE = 'active',
     PENDING = 'pending',
 }
+
+export enum Role {
+    ADMIN = 'admin',
+}

@@ -51,6 +51,7 @@ export class SignInUseCase {
         const accessToken = jwt.sign(
             {
                 email: realtor.props.email,
+                roles: realtor.props.roles,
             },
             config.jwt.accessToken.secret,
             {

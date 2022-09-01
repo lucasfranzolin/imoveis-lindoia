@@ -1,5 +1,5 @@
 import { Entity } from '../domain/Entity';
-import { RealtorStatus } from '../enums';
+import { RealtorStatus, Role } from '../enums';
 import { Address } from '../types';
 
 export type Props = {
@@ -9,6 +9,7 @@ export type Props = {
     fullName: string;
     password: string;
     phone?: string;
+    roles: Array<Role>;
     status: RealtorStatus;
     confirmationToken: string;
 };

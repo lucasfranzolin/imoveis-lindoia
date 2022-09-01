@@ -67,9 +67,7 @@ export async function session(
 ): Promise<void> {
     try {
         const { auth } = res.locals;
-        res.status(httpStatus.OK).json({
-            email: auth.email,
-        });
+        res.status(httpStatus.OK).json(auth);
     } catch (err) {
         next(err);
     }

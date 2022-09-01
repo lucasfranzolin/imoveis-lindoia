@@ -51,6 +51,7 @@ export class SignUpUseCase {
             fullName,
             password: passwordHash,
             confirmationToken,
+            roles: [],
             status: RealtorStatus.PENDING,
         });
         await this.realtorsRepository.save(newRealtor);

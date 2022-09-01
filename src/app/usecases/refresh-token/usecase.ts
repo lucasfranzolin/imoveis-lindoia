@@ -1,8 +1,10 @@
 import jwt from 'jsonwebtoken';
 
 import { config } from '../../../config/config';
+import { RealtorNotFoundError } from '../../api-errors/RealtorNotFoundError';
 import { SessionExpiredError } from '../../api-errors/SessionExpiredError';
 import { SessionNotFoundError } from '../../api-errors/SessionNotFoundError';
+import { IRealtorsRepository } from '../../repositories/IRealtorsRepository';
 import { ISessionsRepository } from '../../repositories/ISessionsRepository';
 
 type RequestDTO = {
@@ -10,7 +12,10 @@ type RequestDTO = {
 };
 
 export class RefreshTokenUseCase {
-    constructor(private sessionsRepository: ISessionsRepository) {}
+    constructor(
+        private sessionsRepository: ISessionsRepository,
+        private realtorsRepository: IRealtorsRepository
+    ) {}
 
     async execute({ refreshToken }: RequestDTO): Promise<{
         accessToken: string;
@@ -28,9 +33,15 @@ export class RefreshTokenUseCase {
             throw new SessionExpiredError();
         }
 
+        const realtor = await this.realtorsRepository.findByEmail(
+            session.props.email
+        );
+        if (!realtor) throw new RealtorNotFoundError();
+
         const accessToken = jwt.sign(
             {
-                email: session.props.email,
+                email: realtor.props.email,
+                roles: realtor.props.roles,
             },
             config.jwt.accessToken.secret,
             {
